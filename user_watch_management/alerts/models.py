@@ -18,6 +18,13 @@ class Vehicle(models.Model):
     manufacturer_name = models.CharField(max_length=DEFAULT_MIN_CHAR_LENGTH, help_text="The name of the manufacturer the vehicle was made by (example Toyota).")
     model_name = models.CharField(max_length=DEFAULT_MIN_CHAR_LENGTH, help_text="The model name of the vehicle (example Corolla).")
     model_year = models.CharField(max_length=MIN_CHAR_FOR_YEAR, help_text="The model's year (example 1996)")
+    
+    def __str__(self) -> str:
+        """
+        String representation of a vehicle which should be human readable.
+        :returns: A string representing the vehicle in question. 
+        """
+        return f"{self.model_year} {self.manufacturer_name} {self.model_name}"
 
     
 class Alert(models.Model):
@@ -40,3 +47,15 @@ class Alert(models.Model):
     branch = models.CharField(max_length=DEFAULT_MIN_CHAR_LENGTH, help_text="The Kenny U-Pull branch to look at if specified (defaults to all if null)", null=True, blank=True)
     
     history = HistoricalRecords()
+    
+    def __str__(self) -> str:
+        """
+        String representation of a user's alert which should be human readable.
+        :returns: A string representing the vehicle in question. 
+        """
+        string_version = f"{self.user.username}'s alert on a {self.vehicle}"
+        
+        if self.branch:
+            string_version = f"{string_version} at {self.branch}"
+            
+        return string_version
