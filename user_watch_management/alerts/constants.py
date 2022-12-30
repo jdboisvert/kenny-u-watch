@@ -1,0 +1,3 @@
+# Table constants
+DEFAULT_MIN_CHAR_LENGTH = 64
+MIN_CHAR_FOR_YEAR = 4
