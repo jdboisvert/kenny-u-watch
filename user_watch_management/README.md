@@ -1,11 +1,11 @@
 # User Watch Management v0.0.0
-This application handles the auth and admin of the user management API along with the tables to track a user's info and alert data. 
+This application handles the auth and admin of the user management API along with the tables to track a user's info and alert data.
 
 ## Features
 
 - Manage a user's alert
-- Create an alert 
-- Admin portal functionality 
+- Create an alert
+- Admin portal functionality
 - API to authenticate via JWT
 
 ## Usage
@@ -42,6 +42,12 @@ A number of pre-commit hooks are set up to ensure all commits meet basic code qu
 
 If one of the hooks changes a file, you will need to `git add` that file and re-run `git commit` before being able to continue.
 
+#### Initialize pre-commit
+```bash
+pre-commit install
+```
+
+
 ### Git Workflow
 
 This repo is configured for trunk-based development. When adding a new fix or feature, create a new branch off of `main`.
@@ -50,7 +56,7 @@ Merges into main _must always be rebased and squashed_. This can be done manuall
 
 ### Testing
 
-This project simply uses the built in testing provided by the Django web framework. 
+This project simply uses the built in testing provided by the Django web framework.
 
 1. `test`
 
@@ -89,5 +95,3 @@ After merging in a PR, GitHub Actions will package the module and create a new r
 ## Credits
 
 - Jeffrey Boisvert ([jdboisvert](https://github.com/jdboisvert)) [info.jeffreyboisvert@gmail.com](mailto:info.jeffreyboisvert@gmail.com)
-
-
