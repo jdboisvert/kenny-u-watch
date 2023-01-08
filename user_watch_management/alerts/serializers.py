@@ -14,3 +14,14 @@ class AlertSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alert
         fields = ["id", 'vehicle', 'branch', 'created', 'modified']
+        
+        
+class CreateAlertSerializer(serializers.ModelSerializer):
+    vehicle = VehicleSerializer()
+    
+    class Meta:
+        model = Alert
+        fields = ['branch', 'vehicle']
+        extra_kwargs = {
+            'branch': {'required': False}
+        }

@@ -1,5 +1,6 @@
 import json
 from typing import Optional
+from unittest import mock
 from uuid import uuid4
 from django.test import TestCase
 
@@ -165,4 +166,149 @@ class GetAlertsTests(TestCase):
         ]
         content = json.loads(response.content)
         self.assertEqual(content, expected_content)
+        
+        
+class CreateAlertsTests(TestCase):
+    test_url = '/api/v1/create-alert'
+    
+    def setUp(self) -> None:
+        self.maxDiff = None
+        username_and_email = "tester@test.com" 
+        self.client = APIClient()
+        self.user = User.objects.create_user(username_and_email, username_and_email, password=str(uuid4()))
+        refresh = RefreshToken.for_user(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
+                
+        return super().setUp()
+    
+    def test_create_alert_with_valid_data(self):
+        manufacturer_name = "Toyota"
+        model_name = "Corolla"
+        model_year = "1996"
+        branch = "Test Branch"
+        
+        data = {
+            'vehicle': {
+                "manufacturer_name": manufacturer_name,
+                "model_name": model_name,
+                "model_year": model_year,
+            },
+            "branch": branch
+        }
+        
+        response = self.client.post(self.test_url, data=data, format='json')
+        
+        self.assertEqual(response.status_code, 201)
+        
+        content = json.loads(response.content)
+        expected_content = {
+                "id": mock.ANY,
+                "vehicle": {
+                        "model_year": manufacturer_name,
+                        "manufacturer_name": model_name,
+                        "model_name": model_year,
+                    },
+                "branch": branch,
+                "created": mock.ANY,
+                "modified": mock.ANY,
+            }
+        self.assertCountEqual(content, expected_content)
+        
+    def test_create_alert_with_valid_data_without_branch(self):
+        manufacturer_name = "Toyota"
+        model_name = "Corolla"
+        model_year = "1996"
+        
+        data = {
+            'vehicle': {
+                "manufacturer_name": manufacturer_name,
+                "model_name": model_name,
+                "model_year": model_year,
+            }
+        }
+        response = self.client.post(self.test_url, data=data, format='json')
+                
+        self.assertEqual(response.status_code, 201)
+        
+        content = json.loads(response.content)
+        expected_content = {
+                "id": mock.ANY,
+                "vehicle": {
+                        "model_year": manufacturer_name,
+                        "manufacturer_name": model_name,
+                        "model_name": model_year,
+                    },
+                "branch": None,
+                "created": mock.ANY,
+                "modified": mock.ANY,
+            }
+        self.assertCountEqual(content, expected_content)
+        
+    def test_create_alert_with_invalid_data_missing_model_year(self):
+        data = {
+            'vehicle': {
+                "manufacturer_name": "Toyota",
+                "model_name": "Corolla",
+            }
+        }
+        
+        response = self.client.post(self.test_url, data=data, format='json')
+        
+        self.assertEqual(response.status_code, 400)
+        
+        content = json.loads(response.content)
+        expected_content = {
+                "vehicle": {
+                    "model_year": [
+                    "This field is required."
+                ]},
+            }
+        self.assertDictEqual(content, expected_content)
+        
+    def test_create_alert_with_invalid_data_missing_model_name(self):
+        data = {
+            'vehicle': {
+                "manufacturer_name": "Toyota",
+                "model_year": "1996",
+            }
+        }
+        
+        response = self.client.post(self.test_url, data=data, format='json')
+        
+        self.assertEqual(response.status_code, 400)
+        
+        content = json.loads(response.content)
+        expected_content = {
+                "vehicle": {
+                "model_name": [
+                    "This field is required."
+                ]},
+            }
+        self.assertDictEqual(content, expected_content)
+        
+    def test_create_alert_with_invalid_data_missing_manufacturer_name(self):
+        data = {
+            'vehicle': {
+                "model_name": "Corolla",
+                "model_year": "1996",
+            }
+        }
+        
+        response = self.client.post(self.test_url, data=data, format='json')
+        
+        self.assertEqual(response.status_code, 400)
+        
+        content = json.loads(response.content)
+        expected_content = {
+
+                 "vehicle": {
+                   "manufacturer_name": [
+                    "This field is required."
+                ],},
+            }
+        self.assertDictEqual(content, expected_content)
+
+        
+    
+
 

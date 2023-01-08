@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 
-from alerts.models import Alert
-from alerts.serializers import AlertSerializer
+from alerts.models import Alert, Vehicle
+from alerts.serializers import AlertSerializer, CreateAlertSerializer
 
 
 @api_view(["GET"])
@@ -38,6 +38,7 @@ def get_alert(request, alert_id: int):
         serializer = AlertSerializer(alert=alert)
             
         return JsonResponse({serializer.data}, safe=False, status=status.HTTP_200_OK)
+    
     except Alert.DoesNotExist:
         return JsonResponse({"error": "Alert does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -48,16 +49,28 @@ def create_alert(request):
     """
     Create an alert for a user. 
     """
-    user = request.user.id
+    user = request.user
     data = request.data
-    data["user"] = user
-    serializer = AlertSerializer(data=data)
+    create_serializer = CreateAlertSerializer(data=data)
     
-    if serializer.is_valid():
-        serializer.save()
-        return JsonResponse({"success": "Alert created successfully"}, status=status.HTTP_201_CREATED)
-    else:
-        return JsonResponse({"error": "Alert not created"}, status=status.HTTP_400_BAD_REQUEST)
+    if not create_serializer.is_valid():
+        return JsonResponse(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    valid_data = create_serializer.validated_data
+    vehicle, _ = Vehicle.objects.get_or_create(
+        manufacturer_name=valid_data["vehicle"]["manufacturer_name"],
+        model_name=valid_data["vehicle"]["model_name"],
+        model_year=valid_data["vehicle"]["model_year"]
+    )
+    
+    alert = Alert.objects.create(
+        user=user,
+        vehicle=vehicle,
+        branch=valid_data.get("branch")
+    )
+    alert_serializer = AlertSerializer(alert)
+    
+    return JsonResponse(alert_serializer.data, status=status.HTTP_201_CREATED)
     
     
 @api_view(["PUT"])
@@ -75,11 +88,12 @@ def update_alert(request, alert_id: int):
         alert = Alert.objects.get(user=user, id=alert_id)
         serializer = AlertSerializer(alert=alert, data=data)
         
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse({"success": "Alert updated successfully"}, status=status.HTTP_200_OK)
-        else:
+        if not serializer.is_valid():
             return JsonResponse({"error": "Alert not updated"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer.save()
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+
     except Alert.DoesNotExist:
         return JsonResponse({"error": "Alert does not exist"}, status=status.HTTP_404_NOT_FOUND)
     
@@ -97,5 +111,6 @@ def delete_alert(request, alert_id: int):
         alert = Alert.objects.get(user=user, id=alert_id)
         alert.delete()
         return JsonResponse({"success": "Alert deleted successfully"}, status=status.HTTP_200_OK)
+    
     except Alert.DoesNotExist:
         return JsonResponse({"error": "Alert does not exist"}, status=status.HTTP_404_NOT_FOUND)
