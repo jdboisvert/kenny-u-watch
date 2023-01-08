@@ -134,3 +134,6 @@ dmypy.json
 # Test Coverage
 coverage_html_report
 coverage_html_report/*
+
+# Apple MacOS
+.DS_Store

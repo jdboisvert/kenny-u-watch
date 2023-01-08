@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from alerts.constants import ALERT_NOT_UPDATED_MESSAGE
+
 
 def create_alert_as_dict(alert: Alert) -> dict:
     return {
@@ -567,6 +569,52 @@ class UpdateAlertsTests(TestCase):
         self.assertEqual(alert.vehicle.model_year, previous_model_year)
         self.assertEqual(alert.vehicle.manufacturer_name, previous_manufacturer_name)
         self.assertEqual(alert.vehicle.model_name, previous_model_name)
+
+    def test_update_alert_invalid_id(self):
+        branch = "New branch"
+
+        data = {
+            "branch": branch,
+        }
+
+        url = f"{self.test_url}/-1"
+        response = self.client.put(url, data=data, format="json")
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_update_alert_invalid_non_existent_id(self):
+        branch = "New branch"
+
+        data = {
+            "branch": branch,
+        }
+
+        url = f"{self.test_url}/12345678"
+        response = self.client.put(url, data=data, format="json")
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_update_alert_invalid_no_fields_updated(self):
+        alert = self.__set_up_an_alert()
+
+        data = {
+            # The alert should not be updated if no new fields are provided
+            "vehicle": {
+                "manufacturer_name": alert.vehicle.manufacturer_name,
+                "model_name": alert.vehicle.model_name,
+                "model_year": alert.vehicle.model_year,
+            },
+            "branch": alert.branch,
+        }
+
+        url = f"{self.test_url}/{alert.id}"
+        response = self.client.put(url, data=data, format="json")
+
+        self.assertEqual(response.status_code, 400)
+
+        content = json.loads(response.content)
+        expected_content = {"error": ALERT_NOT_UPDATED_MESSAGE}
+        self.assertDictEqual(content, expected_content)
 
 
 class DeleteAlertTestCase(TestCase):
