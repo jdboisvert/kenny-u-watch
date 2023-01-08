@@ -47,6 +47,11 @@ If one of the hooks changes a file, you will need to `git add` that file and re-
 pre-commit install
 ```
 
+#### Run on all files
+```bash
+pre-commit run --all-files
+```
+
 
 ### Git Workflow
 
