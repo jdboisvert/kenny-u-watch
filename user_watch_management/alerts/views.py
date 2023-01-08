@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from alerts.models import Alert, Vehicle
 from alerts.serializers import AlertSerializer, CreateAlertSerializer
+from alerts.constants import ALERT_NOT_UPDATED_MESSAGE, ALERT_DOES_NOT_EXIST_MESSAGE
 
 
 @api_view(["GET"])
@@ -39,7 +40,7 @@ def get_alert(request, alert_id: int):
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
     except Alert.DoesNotExist:
-        return JsonResponse({"error": "Alert does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({"error": ALERT_DOES_NOT_EXIST_MESSAGE}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(["POST"])
@@ -106,7 +107,7 @@ def update_alert(request, alert_id: int):
             alert_fields_to_update.append("branch")
 
         if not vehicle_fields_to_update and not alert_fields_to_update:
-            return JsonResponse({"error": "Alert not updated"}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({"error": ALERT_NOT_UPDATED_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
 
         if vehicle_fields_to_update:
             alert.vehicle.save()
@@ -119,7 +120,7 @@ def update_alert(request, alert_id: int):
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
 
     except Alert.DoesNotExist:
-        return JsonResponse({"error": "Alert does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({"error": ALERT_DOES_NOT_EXIST_MESSAGE}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(["DELETE"])
@@ -134,7 +135,7 @@ def delete_alert(request, alert_id: int):
     try:
         alert = Alert.objects.get(user=user, id=alert_id)
         alert.delete()
-        return JsonResponse({"success": "Alert deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse({}, status=status.HTTP_204_NO_CONTENT)
 
     except Alert.DoesNotExist:
-        return JsonResponse({"error": "Alert does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({"error": ALERT_DOES_NOT_EXIST_MESSAGE}, status=status.HTTP_404_NOT_FOUND)
