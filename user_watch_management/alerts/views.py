@@ -86,12 +86,40 @@ def update_alert(request, alert_id: int):
     
     try:
         alert = Alert.objects.get(user=user, id=alert_id)
-        serializer = AlertSerializer(alert=alert, data=data)
+        alert_fields_to_update = []
+        vehicle_fields_to_update = []
         
-        if not serializer.is_valid():
+        if new_manufacturer_name := data.get("vehicle", {}).get("manufacturer_name"):
+            if new_manufacturer_name != alert.vehicle.manufacturer_name:
+                alert.vehicle.manufacturer_name = new_manufacturer_name
+                vehicle_fields_to_update.append("vehicle__manufacturer_name")
+            
+        if new_model_name := data.get("vehicle", {}).get("model_name"):
+            if new_model_name != alert.vehicle.model_name:
+                alert.vehicle.model_name = new_model_name
+                vehicle_fields_to_update.append("vehicle__model_name")
+            
+        if new_model_year := data.get("vehicle", {}).get("model_year"):
+            if new_model_year != alert.vehicle.model_year:
+                alert.vehicle.model_year = new_model_year
+                vehicle_fields_to_update.append("vehicle__model_year")
+            
+        new_branch = data.get("branch")
+        if new_branch != alert.branch:
+            alert.branch = new_branch
+            alert_fields_to_update.append("branch")
+            
+        if not vehicle_fields_to_update and not alert_fields_to_update:
             return JsonResponse({"error": "Alert not updated"}, status=status.HTTP_400_BAD_REQUEST)
         
-        serializer.save()
+        if vehicle_fields_to_update:
+            alert.vehicle.save()
+            
+        if alert_fields_to_update:
+            alert.save()
+            
+        serializer = AlertSerializer(alert)
+
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
 
     except Alert.DoesNotExist:
