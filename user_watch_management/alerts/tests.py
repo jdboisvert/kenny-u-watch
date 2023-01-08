@@ -61,7 +61,7 @@ class VehicleTests(TestCase):
 
 
 class GetAlertsTests(TestCase):
-    test_url = "/api/v1/get-alerts"
+    test_url = "/alerts/v1/get-alerts"
 
     def setUp(self) -> None:
         self.maxDiff = None
@@ -163,7 +163,7 @@ class GetAlertsTests(TestCase):
 
 
 class CreateAlertsTests(TestCase):
-    test_url = "/api/v1/create-alert"
+    test_url = "/alerts/v1/create-alert"
 
     def setUp(self) -> None:
         self.maxDiff = None
@@ -296,7 +296,7 @@ class CreateAlertsTests(TestCase):
 
 
 class UpdateAlertsTests(TestCase):
-    test_url = "/api/v1/update-alert"
+    test_url = "/alerts/v1/update-alert"
 
     def setUp(self) -> None:
         self.maxDiff = None
@@ -570,7 +570,7 @@ class UpdateAlertsTests(TestCase):
 
 
 class DeleteAlertTestCase(TestCase):
-    test_url = "/api/v1/delete-alert"
+    test_url = "/alerts/v1/delete-alert"
 
     def setUp(self) -> None:
         self.maxDiff = None
@@ -631,7 +631,7 @@ class DeleteAlertTestCase(TestCase):
 
 
 class GetAlertTestCase(TestCase):
-    test_url = "/api/v1/get-alert"
+    test_url = "/alerts/v1/get-alert"
 
     def setUp(self) -> None:
         self.maxDiff = None
