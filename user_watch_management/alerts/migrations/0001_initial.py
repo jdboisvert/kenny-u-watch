@@ -43,9 +43,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "model_year",
-                    models.CharField(
-                        help_text="The model's year (example 1996)", max_length=4
-                    ),
+                    models.CharField(help_text="The model's year (example 1996)", max_length=4),
                 ),
             ],
         ),
@@ -54,9 +52,7 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(
-                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
-                    ),
+                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
                 ),
                 ("created", models.DateTimeField(blank=True, editable=False)),
                 ("modified", models.DateTimeField(blank=True, editable=False)),
@@ -151,9 +147,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "vehicle",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="alerts.vehicle"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="alerts.vehicle"),
                 ),
             ],
         ),

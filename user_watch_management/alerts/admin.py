@@ -7,9 +7,9 @@ from alerts.models import Vehicle, Alert
 
 class AlertAdmin(SimpleHistoryAdmin):
     """
-    A class handling the admin view of the User's alerts in the alerts Django app. 
+    A class handling the admin view of the User's alerts in the alerts Django app.
     """
-    
+
     model = Alert
 
 
