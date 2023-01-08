@@ -420,7 +420,7 @@ class UpdateAlertsTests(TestCase):
         self.assertEqual(alert.vehicle.model_name, model_name)
         self.assertEqual(alert.vehicle.model_year, model_year)
         
-    def test_update_alert_with_invalid_data_missing_model_year(self):
+    def test_update_alert_with_data_missing_model_year(self):
         manufacturer_name = "Honda"
         model_name = "Civic"
         
@@ -461,7 +461,245 @@ class UpdateAlertsTests(TestCase):
         self.assertEqual(alert.vehicle.model_name, model_name)
         self.assertEqual(alert.vehicle.model_year, current_model_year)
         
-    # TODO add test for missing data
+    def test_update_alert_with_data_missing_model_name(self):
+        manufacturer_name = "Honda"
+        model_year = "2001"
+        
+        alert = self.__set_up_an_alert()
+        current_model_name = alert.vehicle.model_name
+        
+        data = {
+            'vehicle': {
+                "manufacturer_name": manufacturer_name,
+                "model_year": model_year,
+            }
+        }
+        
+        url = f"{self.test_url}/{alert.id}"
+        response = self.client.put(url, data=data, format='json')
+        
+        self.assertEqual(response.status_code, 200)
+        
+        content = json.loads(response.content)
+        expected_content = {
+                "id": alert.id,
+                "vehicle": {
+                        "model_year": model_year,
+                        "manufacturer_name": manufacturer_name,
+                        "model_name": current_model_name,
+                    },
+                "branch": None,
+                "created": mock.ANY,
+                "modified": mock.ANY,
+            }
+        self.assertDictEqual(content, expected_content)
+        
+        # Ensure that the alert was updated in the database
+        alert.refresh_from_db()
+        alert.vehicle.refresh_from_db()
+        self.assertIsNone(alert.branch)
+        self.assertEqual(alert.vehicle.manufacturer_name, manufacturer_name)
+        self.assertEqual(alert.vehicle.model_name, current_model_name)
+        self.assertEqual(alert.vehicle.model_year, model_year)
+        
+    def test_update_alert_with_data_missing_manufacturer_name(self):
+        model_name = "Civic"
+        model_year = "2001"
+        
+        alert = self.__set_up_an_alert()
+        current_manufacturer_name = alert.vehicle.manufacturer_name
+        
+        data = {
+            'vehicle': {
+                "model_name": model_name,
+                "model_year": model_year,
+            }
+        }
+
+        url = f"{self.test_url}/{alert.id}"
+        response = self.client.put(url, data=data, format='json')
+
+        self.assertEqual(response.status_code, 200)
+        
+        content = json.loads(response.content)
+        expected_content = {
+                "id": alert.id,
+                "vehicle": {
+                        "model_year": model_year,
+                        "manufacturer_name": current_manufacturer_name,
+                        "model_name": model_name,
+                    },
+                "branch": None,
+                "created": mock.ANY,
+                "modified": mock.ANY,
+            }
+        self.assertDictEqual(content, expected_content)
+        
+        # Ensure that the alert was updated in the database
+        alert.refresh_from_db()
+        alert.vehicle.refresh_from_db()
+        self.assertIsNone(alert.branch)
+        self.assertEqual(alert.vehicle.manufacturer_name, current_manufacturer_name)
+        self.assertEqual(alert.vehicle.model_name, model_name)
+        self.assertEqual(alert.vehicle.model_year, model_year)
+        
+        
+    def test_update_alert_with_data_missing_vehicle(self):
+        alert = self.__set_up_an_alert()
+        branch = "New branch"
+        
+        data = {
+            'branch': branch,
+        }
+        
+        previous_model_year = alert.vehicle.model_year
+        previous_manufacturer_name = alert.vehicle.manufacturer_name
+        previous_model_name = alert.vehicle.model_name
+        
+        
+        url = f"{self.test_url}/{alert.id}"
+        response = self.client.put(url, data=data, format='json')
+        
+        self.assertEqual(response.status_code, 200)
+        
+        content = json.loads(response.content)
+        expected_content = {
+                "id": alert.id,
+                "vehicle": {   
+                        # Should be unchanged
+                        "model_year": alert.vehicle.model_year,
+                        "manufacturer_name": alert.vehicle.manufacturer_name,
+                        "model_name": alert.vehicle.model_name,
+                    },
+                "branch": branch,
+                "created": mock.ANY,
+                "modified": mock.ANY,
+            }
+        self.assertDictEqual(content, expected_content)
+        
+        # Ensure that the alert was updated in the database
+        alert.refresh_from_db()
+        alert.vehicle.refresh_from_db()
+        self.assertEqual(alert.branch, branch)
+        self.assertEqual(alert.vehicle.model_year, previous_model_year)
+        self.assertEqual(alert.vehicle.manufacturer_name, previous_manufacturer_name)
+        self.assertEqual(alert.vehicle.model_name, previous_model_name)            
 
 
-# TODO add test case for delete alert
+class DeleteAlertTestCase(TestCase):
+    test_url = '/api/v1/delete-alert'
+    
+    def setUp(self) -> None:
+        self.maxDiff = None
+        username_and_email = "tester@test.com" 
+        self.client = APIClient()
+        self.user = User.objects.create_user(username_and_email, username_and_email, password=str(uuid4()))
+        refresh = RefreshToken.for_user(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
+                
+        return super().setUp()
+    
+    def __set_up_an_alert(self) -> Alert:
+        vehicle = Vehicle.objects.create(
+            manufacturer_name="Honda",
+            model_name="Civic",
+            model_year="2001",
+        )
+        alert = Alert.objects.create(
+            vehicle=vehicle,
+            branch="Test branch",
+            user=self.user,
+        )  
+        return alert
+
+    def test_delete_alert(self):
+        alert = self.__set_up_an_alert()
+        
+        url = f"{self.test_url}/{alert.id}"
+        response = self.client.delete(url)
+        
+        self.assertEqual(response.status_code, 204)
+        
+        # Ensure that the alert was deleted from the database
+        with self.assertRaises(Alert.DoesNotExist):
+            alert.refresh_from_db()
+            
+    def test_delete_alert_with_invalid_id(self):
+        alert = self.__set_up_an_alert()
+        
+        url = f"{self.test_url}/-1"
+        response = self.client.delete(url)
+        
+        self.assertEqual(response.status_code, 404)
+        
+        # Ensure that the alert was not deleted from the database
+        alert.refresh_from_db()
+        
+    def test_delete_alert_with_non_existent_id(self):
+        alert = self.__set_up_an_alert()
+        
+        url = f"{self.test_url}/100000"
+        response = self.client.delete(url)
+        
+        self.assertEqual(response.status_code, 404)
+        
+        # Ensure that the alert was not deleted from the database
+        alert.refresh_from_db()
+        
+        
+class GetAlertTestCase(TestCase):
+    test_url = '/api/v1/get-alert'
+    
+    def setUp(self) -> None:
+        self.maxDiff = None
+        username_and_email = "tester@test.com" 
+        self.client = APIClient()
+        self.user = User.objects.create_user(username_and_email, username_and_email, password=str(uuid4()))
+        refresh = RefreshToken.for_user(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
+                
+        return super().setUp()
+    
+    def __set_up_an_alert(self) -> Alert:
+        vehicle = Vehicle.objects.create(
+            manufacturer_name="Honda",
+            model_name="Civic",
+            model_year="2001",
+        )
+        alert = Alert.objects.create(
+            vehicle=vehicle,
+            branch="Test branch",
+            user=self.user,
+        )
+        return alert
+    
+    def test_get_alert(self):
+        alert = self.__set_up_an_alert()
+        
+        url = f"{self.test_url}/{alert.id}"
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, 200)
+        
+        content = json.loads(response.content)
+        expected_content = create_alert_as_dict(alert=alert)
+        self.assertDictEqual(content, expected_content)
+        
+    def test_get_alert_with_invalid_id(self):
+        self.__set_up_an_alert()
+        
+        url = f"{self.test_url}/-1"
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, 404)
+        
+    
+    def test_get_alert_with_non_existent_id(self):
+        self.__set_up_an_alert()
+        
+        url = f"{self.test_url}/100000"
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, 404)
+
+        

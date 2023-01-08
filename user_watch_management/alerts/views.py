@@ -35,9 +35,9 @@ def get_alert(request, alert_id: int):
     
     try:
         alert = Alert.objects.get(user=user, id=alert_id)
-        serializer = AlertSerializer(alert=alert)
+        serializer = AlertSerializer(alert)
             
-        return JsonResponse({serializer.data}, safe=False, status=status.HTTP_200_OK)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     
     except Alert.DoesNotExist:
         return JsonResponse({"error": "Alert does not exist"}, status=status.HTTP_404_NOT_FOUND)
@@ -138,7 +138,7 @@ def delete_alert(request, alert_id: int):
     try:
         alert = Alert.objects.get(user=user, id=alert_id)
         alert.delete()
-        return JsonResponse({"success": "Alert deleted successfully"}, status=status.HTTP_200_OK)
+        return JsonResponse({"success": "Alert deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
     
     except Alert.DoesNotExist:
         return JsonResponse({"error": "Alert does not exist"}, status=status.HTTP_404_NOT_FOUND)
