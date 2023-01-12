@@ -7,11 +7,10 @@ class CreateUserSerializer(serializers.ModelSerializer):
     Serializer for creating a user.
     """
 
-    password = serializers.CharField(write_only=True)
-
     class Meta:
         model = User
-        fields = ("username", "password")
+        fields = ["email", "username", "password"]
+        extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
         """
