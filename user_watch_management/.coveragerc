@@ -1,5 +1,5 @@
 [run]
-source = alerts
+source = alerts, signup
 branch = True
 omit =
     */migrations/*
