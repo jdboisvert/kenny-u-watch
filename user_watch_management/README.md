@@ -1,4 +1,4 @@
-# User Watch Management v0.1.0
+# User Watch Management v0.2.0
 This application handles the auth and admin of the user management API along with the tables to track a user's info and alert data.
 
 ## Features
@@ -26,8 +26,8 @@ eval "$(pyenv virtualenv-init -)"
 source ~/.zshrc
 
 # create a virtualenv
-pyenv install 0.1.0
-pyenv virtualenv 0.1.0 user_watch_management
+pyenv install 0.2.0
+pyenv virtualenv 0.2.0 user_watch_management
 pyenv activate user_watch_management
 
 # install dependencies
