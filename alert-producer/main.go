@@ -49,6 +49,7 @@ func checkForNewVehiclesPosted(vehicle Vehicle) {
 		Make:  vehicle.Make,
 		Model: vehicle.Model,
 	}
+	// TODO make use of GetLatestInventoryListing function which will be reviewed and merged into the SDK shortly https://github.com/jdboisvert/kenny-u-pull-go-sdk/pull/4
 	inventoryListings, err := kennyupull.GetInventory(inventorySearch)
 	if err != nil {
 		log.Println("Got an error when trying to get inventory listings: ", err)
