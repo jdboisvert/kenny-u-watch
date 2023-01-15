@@ -38,6 +38,11 @@ Merges into main *must always be rebased and squashed*. This can be done manuall
 
 All test files are kept in ./test/ and named *_test.go. Github workflow automatically run the tests when code is pushed and will return a report with results when finished.
 
+### Running server
+
+        # run the server
+        go run .
+
 ### PRs and Releases
 
 GitHub Actions is configured to perform unit tests for all new PRs.
