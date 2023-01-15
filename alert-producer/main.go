@@ -80,7 +80,7 @@ func sendUpdateToSubscriber(latestListing kennyupull.InventoryListing) {
 	}
 
 	// TODO move to env var or config file and need retry logic for alerting via exponential backoff.
-	resp, err := http.Post("localhost:8080/v1/new-listing-consumer", "application/json",
+	resp, err := http.Post("localhost:8080/listing-consumer/v1/new-listing", "application/json",
 		bytes.NewBuffer(json_data))
 
 	if err != nil {
