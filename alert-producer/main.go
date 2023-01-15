@@ -1,10 +1,13 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"reflect"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-co-op/gocron"
 )
 
 type Vehicle struct {
@@ -28,9 +31,6 @@ func vehicleAlreadySubscribed(vehiclesToSearchFor []Vehicle, vehicleToAdd Vehicl
 
 func subscribeToVehicle(c *gin.Context) {
 	var newVehicle Vehicle
-
-	// Call BindJSON to bind the received JSON to
-	// newAlbum.
 	if err := c.BindJSON(&newVehicle); err != nil {
 		return
 	}
@@ -48,4 +48,13 @@ func main() {
 	router.POST("/v1/subscribe-vehicle", subscribeToVehicle)
 
 	router.Run("localhost:8080") // TODO move to env var or config file
+
+	// TODO move to a separate file
+	// Run the scheduler to poll the API every 30 minutes
+	s := gocron.NewScheduler(time.UTC)
+	s.Every(30).Minutes().Do(func() {
+		// TODO call the API and check for new vehicles
+		log.Println("Checking for new vehicles to alert on...")
+	})
+	s.StartAsync()
 }
