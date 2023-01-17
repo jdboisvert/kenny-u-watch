@@ -61,7 +61,6 @@ class NewListingTests(TestCase):
 
 
 class IngestListingTests(TestCase):
-    # Write unit tests to test ingest_listening task.
     def setUp(self) -> None:
         self.maxDiff = None
         username_and_email = "tester@test.com"
