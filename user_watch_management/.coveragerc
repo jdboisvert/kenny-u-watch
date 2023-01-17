@@ -1,11 +1,12 @@
 [run]
-source = alerts, signup
+source = alerts, signup, listing_consumer
 branch = True
 omit =
     */migrations/*
     *__init__.py
     */tests.py
     */admin.py
+    */apps.py
 
 
 [report]

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 
-class KennyUPullListingSerializer(serializers.ModelSerializer):
+class KennyUPullListingSerializer(serializers.Serializer):
     year = serializers.CharField()
     make = serializers.CharField()
     model = serializers.CharField()

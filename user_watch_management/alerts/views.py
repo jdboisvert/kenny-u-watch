@@ -55,7 +55,7 @@ def create_alert(request):
     create_serializer = CreateAlertSerializer(data=data)
 
     if not create_serializer.is_valid():
-        return JsonResponse(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse(create_serializer.errors, safe=False, status=status.HTTP_400_BAD_REQUEST)
 
     valid_data = create_serializer.validated_data
     vehicle, _ = Vehicle.objects.get_or_create(
