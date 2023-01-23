@@ -125,6 +125,18 @@ You can view the html report (a more readable format) by copy pasting the follow
 file:///<project path>/user_watch_management/alerts/coverage_html_report/index.html
 ```
 
+### Running via Docker
+The application can be run via Docker. The following commands will build the image and run the container.
+
+First time building the image or rebuilding the image:
+```bash
+docker compose build
+```
+To run the container:
+```bash
+docker compose up
+```
+
 ### PRs and Releases
 
 GitHub Actions is configured to perform unit tests against MacOS and Linux runners using both Python 3.8, 3.9, and 3.10 for all new PRs.
