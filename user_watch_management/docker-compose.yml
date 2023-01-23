@@ -3,7 +3,7 @@
 version: '3.9'
 
 services:
-  user_watch_management:
+  web:
     build:
       context: .
     command: >
@@ -24,8 +24,53 @@ services:
       - db
 
   db:
-    image: postgres:13-alpine
+    image: postgres:14-alpine
     environment:
       - POSTGRES_DB=devdb
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=changeme
+
+  redis:
+    image: redis:7-alpine
+
+  celery_worker:
+    build:
+      context: .
+    image: celery_worker
+    command: >
+      sh -c "rm -f './celerybeat.pid'
+             celery -A user_watch beat -l INFO"
+
+    volumes:
+      - ../user_watch_management:/user_watch_management
+    depends_on:
+      - redis
+      - db
+
+  celery_beat:
+    build:
+      context: .
+    image: celery_beat
+    command: >
+      sh -c "rcelery -A user_watch worker -l INFO"
+    volumes:
+      - ../user_watch_management:/user_watch_management
+    depends_on:
+      - redis
+      - db
+
+  flower:
+    build:
+      context: .
+    image: flower
+    command: >
+      sh -c "celery -A user_watch  \
+             --broker="${CELERY_BROKER}" \
+             flower"
+    volumes:
+      - ../user_watch_management:/user_watch_management
+    ports:
+      - 5557:5555
+    depends_on:
+      - redis
+      - db
