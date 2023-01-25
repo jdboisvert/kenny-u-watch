@@ -12,7 +12,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ../user_watch_management:/user_watch_management
+      - .:/user_watch_management
     environment:
       - SECRET_KEY=devsecretkey
       - DEBUG=1
@@ -20,11 +20,15 @@ services:
       - DB_NAME=devdb
       - DB_USER=devuser
       - DB_PASS=changeme
+    env_file:
+      - ./.env
     depends_on:
       - db
 
   db:
     image: postgres:14-alpine
+    env_file:
+      - ./.env
     environment:
       - POSTGRES_DB=devdb
       - POSTGRES_USER=devuser
@@ -32,45 +36,17 @@ services:
 
   redis:
     image: redis:7-alpine
+    hostname: redis
 
   celery_worker:
     build:
       context: .
     image: celery_worker
-    command: >
-      sh -c "rm -f './celerybeat.pid'
-             celery -A user_watch beat -l INFO"
-
+    env_file:
+      - ./.env
+    command: ["celery", "-A", "user_watch", "worker", "-l", "INFO"]
     volumes:
-      - ../user_watch_management:/user_watch_management
-    depends_on:
-      - redis
-      - db
-
-  celery_beat:
-    build:
-      context: .
-    image: celery_beat
-    command: >
-      sh -c "rcelery -A user_watch worker -l INFO"
-    volumes:
-      - ../user_watch_management:/user_watch_management
-    depends_on:
-      - redis
-      - db
-
-  flower:
-    build:
-      context: .
-    image: flower
-    command: >
-      sh -c "celery -A user_watch  \
-             --broker="${CELERY_BROKER}" \
-             flower"
-    volumes:
-      - ../user_watch_management:/user_watch_management
-    ports:
-      - 5557:5555
+      - .:/user_watch_management
     depends_on:
       - redis
       - db

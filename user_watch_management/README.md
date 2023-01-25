@@ -126,6 +126,8 @@ file:///<project path>/user_watch_management/alerts/coverage_html_report/index.h
 ```
 
 ### Running via Docker
+
+Before following these steps ensure to copy `.env.example` to `.env` and fill in the values.
 The application can be run via Docker. The following commands will build the image and run the container.
 
 First time building the image or rebuilding the image:
@@ -136,6 +138,35 @@ To run the container:
 ```bash
 docker compose up
 ```
+
+#### Example to run tests via Docker
+This will given you access to the container's shell. From there you can run the tests.
+```bash
+docker compose exec web python manage.py shell
+```
+Example python code to run in shell to see if celery is running correctly after running the container:
+```python
+from listing_consumer.tasks import ingest_listening
+
+body = {
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2000",
+    "date_listed": "2020-01-01",
+    "row_id": "A12",
+    "branch": "Ottawa",
+    "listing_url": "https://www.kennyupull.com/listing/A12",
+}
+
+result = ingest_listening.delay(body)
+
+result.id # should return a UUID string of the task
+result.status # should return 'SUCCESS' or 'FAILURE'
+result.get() # should return the result expected in this case None
+```
+
+
+
 
 ### PRs and Releases
 
