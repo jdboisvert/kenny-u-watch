@@ -34,6 +34,7 @@ class NewListingTests(TestCase):
             "row_id": "A12",
             "branch": "Ottawa",
             "listing_url": "https://www.kennyupull.com/listing/A12",
+            "client_id": "1234",
         }
 
         response = self.client.post(self.test_url, body, format="json")
@@ -51,6 +52,7 @@ class NewListingTests(TestCase):
             "row_id": "A12",
             "branch": "Ottawa",
             "listing_url": "https://www.kennyupull.com/listing/A12",
+            "client_id": "1234",
             "invalid_field": "invalid",
         }
 
@@ -88,6 +90,7 @@ class IngestListingTests(TestCase):
             "row_id": "A12",
             "branch": "Ottawa",
             "listing_url": "https://www.kennyupull.com/listing/A12",
+            "client_id": str(alert.external_id),
         }
 
         ingest_listening(kenny_u_pull_listing_data=kenny_u_pull_listing_data)
@@ -109,7 +112,7 @@ class IngestListingTests(TestCase):
         )
 
     def test_ingest_listing_no_matching_alerts(self):
-        self.__set_up_an_alert()
+        alert = self.__set_up_an_alert()
         kenny_u_pull_listing_data = {
             "make": "Honda",
             "model": "Civic",
@@ -118,6 +121,7 @@ class IngestListingTests(TestCase):
             "row_id": "A12",
             "branch": "Ottawa",
             "listing_url": "https://www.kennyupull.com/listing/A12",
+            "client_id": str(alert.external_id),
         }
 
         ingest_listening(kenny_u_pull_listing_data=kenny_u_pull_listing_data)
@@ -125,7 +129,7 @@ class IngestListingTests(TestCase):
         self.assertEqual(len(mail.outbox), 0)
 
     def test_ingest_listing_matching_alerts_but_not_branch(self):
-        self.__set_up_an_alert(branch="St-Test")
+        alert = self.__set_up_an_alert(branch="St-Test")
         kenny_u_pull_listing_data = {
             "make": "Toyota",
             "model": "Corolla",
@@ -134,6 +138,7 @@ class IngestListingTests(TestCase):
             "row_id": "A12",
             "branch": "Ottawa",
             "listing_url": "https://www.kennyupull.com/listing/A12",
+            "client_id": str(alert.external_id),
         }
 
         ingest_listening(kenny_u_pull_listing_data=kenny_u_pull_listing_data)
@@ -150,6 +155,7 @@ class IngestListingTests(TestCase):
             "row_id": "A12",
             "branch": "Ottawa",
             "listing_url": "https://www.kennyupull.com/listing/A12",
+            "client_id": "1234",
         }
 
         ingest_listening(kenny_u_pull_listing_data=kenny_u_pull_listing_data)

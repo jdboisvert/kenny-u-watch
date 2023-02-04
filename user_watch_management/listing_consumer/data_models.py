@@ -10,3 +10,4 @@ class KennyUPullListing:
     row_id: str
     branch: str
     listing_url: str
+    client_id: str

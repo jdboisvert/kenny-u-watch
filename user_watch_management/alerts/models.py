@@ -1,3 +1,4 @@
+import uuid
 from django.conf import settings
 from django.db import models
 
@@ -54,6 +55,7 @@ class Alert(models.Model):
         null=True,
         blank=True,
     )
+    external_id = models.UUIDField(default=uuid.uuid4)
 
     history = HistoricalRecords()
 
