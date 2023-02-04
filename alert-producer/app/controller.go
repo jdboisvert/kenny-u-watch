@@ -65,6 +65,8 @@ func SendUpdateToASubscriber(latestListing *kennyupull.InventoryListing, subscri
 	values := map[string]string{"year": latestListing.Year, "make": latestListing.Make, "model": latestListing.Model, "date_listed": latestListing.DateListed, "row_id": latestListing.RowID, "branch": latestListing.Branch, "listing_url": latestListing.ListingUrl, "client_id": subscriber.ClientID}
 	json_data, err := json.Marshal(values)
 
+	log.Println("Sending alert to subscriber: ", subscriber, " with data: ", string(json_data))
+
 	if err != nil {
 		log.Fatal(err)
 	}

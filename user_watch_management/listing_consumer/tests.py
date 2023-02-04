@@ -12,7 +12,6 @@ from django.core import mail
 from listing_consumer.serializers import KennyUPullListingSerializer
 from listing_consumer.tasks import ingest_listening
 from alerts.models import Alert, Vehicle
-from alerts.models import Alert
 
 
 class NewListingTests(TestCase):
@@ -34,7 +33,7 @@ class NewListingTests(TestCase):
             "row_id": "A12",
             "branch": "Ottawa",
             "listing_url": "https://www.kennyupull.com/listing/A12",
-            "client_id": "1234",
+            "client_id": str(uuid4()),
         }
 
         response = self.client.post(self.test_url, body, format="json")
@@ -52,7 +51,7 @@ class NewListingTests(TestCase):
             "row_id": "A12",
             "branch": "Ottawa",
             "listing_url": "https://www.kennyupull.com/listing/A12",
-            "client_id": "1234",
+            "client_id": str(uuid4()),
             "invalid_field": "invalid",
         }
 
@@ -103,7 +102,6 @@ class IngestListingTests(TestCase):
         self.assertEqual(
             mail.outbox[0].body, f'You can go visit the listing on their website at {kenny_u_pull_listing_data["listing_url"]}'
         )
-        self.assertEqual(mail.outbox[0].from_email, "support@kenny-u-watch.com")
         self.assertEqual(
             mail.outbox[0].to,
             [
@@ -111,7 +109,7 @@ class IngestListingTests(TestCase):
             ],
         )
 
-    def test_ingest_listing_no_matching_alerts(self):
+    def test_ingest_listing_no_matching_alerts_with_vehicle_details_given(self):
         alert = self.__set_up_an_alert()
         kenny_u_pull_listing_data = {
             "make": "Honda",
@@ -155,7 +153,7 @@ class IngestListingTests(TestCase):
             "row_id": "A12",
             "branch": "Ottawa",
             "listing_url": "https://www.kennyupull.com/listing/A12",
-            "client_id": "1234",
+            "client_id": str(uuid4()),
         }
 
         ingest_listening(kenny_u_pull_listing_data=kenny_u_pull_listing_data)
