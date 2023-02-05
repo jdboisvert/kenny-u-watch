@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -41,12 +43,20 @@ func main() {
 	router.POST("/v1/subscribe-vehicle", subscribeToVehicle)
 	router.DELETE("/v1/unsubscribe-from-vehicle", unsubscribeToVehicle)
 
+	app.LoadEnv()
+
+	numberOfMinutesToCheckForNewListingsEnv := app.GetEnv("NUMBER_OF_MINUTES_TO_CHECK_FOR_NEW_LISTINGS")
+	numberOfMinutesToCheckForNewListings, err := strconv.Atoi(numberOfMinutesToCheckForNewListingsEnv)
+	if err != nil {
+		log.Fatal("Error parsing NUMBER_OF_MINUTES_TO_CHECK_FOR_NEW_LISTINGS env variable: ", err)
+	}
+
 	s := gocron.NewScheduler(time.UTC)
-	s.Every(1).Minutes().Do(func() {
-		// TODO move to env var or config file for number of minutes to check for new listings
+	log.Println("Checking for new listings every ", numberOfMinutesToCheckForNewListings, " minutes")
+	s.Every(numberOfMinutesToCheckForNewListings).Minutes().Do(func() {
 		app.CheckVehiclesListings()
 	})
 	s.StartAsync()
 
-	router.Run("localhost:8080") // TODO move to env var or config file
+	router.Run("localhost:8080")
 }

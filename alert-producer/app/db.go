@@ -8,11 +8,10 @@ import (
 )
 
 func getDatabase() *sql.DB {
-	// TODO more to env vars or config file
-	username := "root"
-	password := ""
-	host := "127.0.0.1"
-	port := "3306"
+	username := GetEnv("DB_USERNAME")
+	password := GetEnv("DB_PASSWORD")
+	host := GetEnv("DB_HOST")
+	port := GetEnv("DB_PORT")
 
 	db, err := sql.Open("mysql", username+":"+password+"@tcp("+host+":"+port+")/alertproducer")
 

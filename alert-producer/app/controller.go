@@ -71,13 +71,12 @@ func SendUpdateToASubscriber(latestListing *kennyupull.InventoryListing, subscri
 		log.Fatal(err)
 	}
 
-	// TODO move to env var or config file and need retry logic for alerting via exponential backoff.
-	resp, err := http.Post("http://localhost:8000/listing-consumer/v1/new-listing", "application/json",
-		bytes.NewBuffer(json_data))
+	mainAlertConsumerUrl := GetEnv("MAIN_ALERT_CONSUMER_URL")
+	resp, err := http.Post(mainAlertConsumerUrl, "application/json", bytes.NewBuffer(json_data))
 
 	if err != nil {
 		log.Println("Got an error when trying to send an alert: ", err)
-		return // TODO need retry logic for alerting via exponential backoff.
+		return
 	}
 
 	if resp.StatusCode != http.StatusNoContent {

@@ -17,5 +17,17 @@
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# JetBrains IDEs
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Sublime Text
+.sublime-workspace
+
+# Vim
+*.swp
+
+# Env files
+.env
