@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS alertproducer;
-USE alertproducer;
+CREATE DATABASE IF NOT EXISTS alertproducertest;
+USE alertproducertest;
 
 CREATE TABLE IF NOT EXISTS vehicle (
   id INT PRIMARY KEY AUTO_INCREMENT,

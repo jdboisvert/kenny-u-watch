@@ -12,7 +12,10 @@ import (
 
 func CheckVehiclesListings() {
 	log.Println("Checking for new vehicles to alert on...")
-	vehiclesToSearchFor := GetAllVehicles()
+	db := GetDatabase()
+	defer db.Close()
+
+	vehiclesToSearchFor := GetAllVehicles(db)
 	for _, vehicle := range vehiclesToSearchFor {
 		go CheckForNewVehiclesPosted(vehicle)
 	}
@@ -47,14 +50,20 @@ func CheckForNewVehiclesPosted(vehicle Vehicle) {
 		go SendUpdateToSubscribers(latestListing, &vehicle)
 
 		// Update the vehicle with the latest listing info
+		db := GetDatabase()
+		defer db.Close()
+
 		vehicle.LastRowID.String = latestListing.RowID
 		vehicle.Location.String = latestListing.Branch
-		UpdateVehicle(&vehicle)
+		UpdateVehicle(db, &vehicle)
 	}
 }
 
 func SendUpdateToSubscribers(latestListing *kennyupull.InventoryListing, vehicle *Vehicle) {
-	allSubscribers := GetAllSubscriptions(vehicle)
+	db := GetDatabase()
+	defer db.Close()
+
+	allSubscribers := GetAllSubscriptions(db, vehicle)
 
 	for _, subscriber := range allSubscribers {
 		go SendUpdateToASubscriber(latestListing, &subscriber)
@@ -87,25 +96,31 @@ func SendUpdateToASubscriber(latestListing *kennyupull.InventoryListing, subscri
 }
 
 func SubscribeToVehicle(vehicleSubscription *VehicleSubscription) (*Subscription, error) {
-	vehicle, err := GetOrCreateVehicle(vehicleSubscription.Manufacturer, vehicleSubscription.Model, vehicleSubscription.Year)
+	db := GetDatabase()
+	defer db.Close()
+
+	vehicle, err := GetOrCreateVehicle(db, vehicleSubscription.Manufacturer, vehicleSubscription.Model, vehicleSubscription.Year)
 
 	if err != nil {
 		log.Println("Got an error when trying to get or create vehicle: ", err)
 		return nil, err
 	}
 
-	subscription, err := CreateSubscription(&vehicle, vehicleSubscription.ClientID)
+	subscription, err := CreateSubscription(db, &vehicle, vehicleSubscription.ClientID)
 
 	return subscription, err
 }
 
 func UnsubscribeFromVehicle(vehicleSubscription *VehicleSubscription) {
-	vehicle, err := GetOrCreateVehicle(vehicleSubscription.Manufacturer, vehicleSubscription.Model, vehicleSubscription.Year)
+	db := GetDatabase()
+	defer db.Close()
+
+	vehicle, err := GetOrCreateVehicle(db, vehicleSubscription.Manufacturer, vehicleSubscription.Model, vehicleSubscription.Year)
 
 	if err != nil {
 		log.Println("Got an error when trying to get or create vehicle: ", err)
 		return
 	}
 
-	DeleteSubscription(&vehicle, vehicleSubscription.ClientID)
+	DeleteSubscription(db, &vehicle, vehicleSubscription.ClientID)
 }

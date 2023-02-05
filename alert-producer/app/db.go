@@ -7,7 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func getDatabase() *sql.DB {
+func GetDatabase() *sql.DB {
 	username := GetEnv("DB_USERNAME")
 	password := GetEnv("DB_PASSWORD")
 	host := GetEnv("DB_HOST")
@@ -22,19 +22,15 @@ func getDatabase() *sql.DB {
 	return db
 }
 
-func GetOrCreateVehicle(manufacturer string, model string, year string) (Vehicle, error) {
-	db := getDatabase()
-	defer db.Close()
-
+func GetOrCreateVehicle(db *sql.DB, manufacturer string, model string, year string) (Vehicle, error) {
 	// Check if vehicle exists
 	var vehicle Vehicle
-	err := db.QueryRow("SELECT * FROM vehicle WHERE manufacturer_name = ? AND model_name = ? AND model_year = ?", manufacturer, model, year).Scan(&vehicle.ID, &vehicle.Manufacturer, &vehicle.Model, &vehicle.Year, &vehicle.LastRowID)
+	err := db.QueryRow("SELECT * FROM vehicle WHERE manufacturer_name = ? AND model_name = ? AND model_year = ?", manufacturer, model, year).Scan(&vehicle.ID, &vehicle.Manufacturer, &vehicle.Model, &vehicle.Year, &vehicle.LastRowID, &vehicle.Location)
 
 	if err != nil {
 		// Vehicle doesn't exist so create it
 		res, err := db.Exec("INSERT INTO vehicle (manufacturer_name, model_name, model_year) VALUES (?, ?, ?)", manufacturer, model, year)
 		if err != nil {
-
 			log.Fatal(err)
 		}
 
@@ -55,10 +51,7 @@ func GetOrCreateVehicle(manufacturer string, model string, year string) (Vehicle
 	return vehicle, nil
 }
 
-func GetAllVehicles() []Vehicle {
-	db := getDatabase()
-	defer db.Close()
-
+func GetAllVehicles(db *sql.DB) []Vehicle {
 	rows, err := db.Query("SELECT * FROM vehicle")
 	if err != nil {
 		log.Fatal(err)
@@ -79,10 +72,7 @@ func GetAllVehicles() []Vehicle {
 }
 
 // Updates the last row id and location for a vehicle
-func UpdateVehicle(vehicle *Vehicle) {
-	db := getDatabase()
-	defer db.Close()
-
+func UpdateVehicle(db *sql.DB, vehicle *Vehicle) {
 	_, rowIdUpdateErr := db.Exec("UPDATE vehicle SET last_row_id = ? WHERE id = ?", vehicle.LastRowID.String, vehicle.ID)
 	if rowIdUpdateErr != nil {
 		log.Fatal(rowIdUpdateErr)
@@ -93,10 +83,7 @@ func UpdateVehicle(vehicle *Vehicle) {
 	}
 }
 
-func GetAllSubscriptions(vehicle *Vehicle) []Subscription {
-	db := getDatabase()
-	defer db.Close()
-
+func GetAllSubscriptions(db *sql.DB, vehicle *Vehicle) []Subscription {
 	rows, err := db.Query("SELECT * FROM subscription WHERE vehicle_id = ?", vehicle.ID)
 	if err != nil {
 		log.Fatal(err)
@@ -116,10 +103,7 @@ func GetAllSubscriptions(vehicle *Vehicle) []Subscription {
 	return subscribers
 }
 
-func CreateSubscription(vehicle *Vehicle, clientID string) (*Subscription, error) {
-	db := getDatabase()
-	defer db.Close()
-
+func CreateSubscription(db *sql.DB, vehicle *Vehicle, clientID string) (*Subscription, error) {
 	res, err := db.Exec("INSERT INTO subscription (client_id, vehicle_id) VALUES (?, ?)", clientID, vehicle.ID)
 	if err != nil {
 		return nil, err
@@ -140,10 +124,7 @@ func CreateSubscription(vehicle *Vehicle, clientID string) (*Subscription, error
 	return &subscriber, nil
 }
 
-func DeleteSubscription(vehicle *Vehicle, clientId string) {
-	db := getDatabase()
-	defer db.Close()
-
+func DeleteSubscription(db *sql.DB, vehicle *Vehicle, clientId string) {
 	_, err := db.Exec("DELETE FROM subscription WHERE client_id = ? AND vehicle_id = ?", clientId, vehicle.ID)
 	if err != nil {
 		log.Fatal(err)
