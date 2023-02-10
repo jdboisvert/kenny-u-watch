@@ -42,6 +42,13 @@ services:
     build:
       context: .
     image: celery_worker
+    environment:
+      - SECRET_KEY=devsecretkey
+      - DEBUG=1
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
     env_file:
       - ./.env
     command: ["celery", "-A", "user_watch", "worker", "-l", "INFO"]

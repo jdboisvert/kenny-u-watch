@@ -139,7 +139,7 @@ To run the container:
 docker compose up
 ```
 
-#### Example to run tests via Docker
+#### Example to run code via Docker
 This will given you access to the container's shell. From there you can run the tests.
 ```bash
 docker compose exec web python manage.py shell
@@ -165,8 +165,10 @@ result.status # should return 'SUCCESS' or 'FAILURE'
 result.get() # should return the result expected in this case None
 ```
 
-
-
+#### Example to run tests via Docker
+```bash
+docker compose exec web python manage.py test
+```
 
 ### PRs and Releases
 

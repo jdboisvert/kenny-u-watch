@@ -9,3 +9,4 @@ class KennyUPullListingSerializer(serializers.Serializer):
     row_id = serializers.CharField()
     branch = serializers.CharField()
     listing_url = serializers.CharField()
+    client_id = serializers.UUIDField()
