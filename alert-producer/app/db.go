@@ -52,17 +52,20 @@ func GetOrCreateVehicle(db *sql.DB, manufacturer string, model string, year stri
 }
 
 func GetAllVehicles(db *sql.DB) []Vehicle {
+	var vehicles []Vehicle
+
 	rows, err := db.Query("SELECT * FROM vehicle")
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Error getting vehicles from database. Returning empty array", err)
+		return vehicles
 	}
 
-	var vehicles []Vehicle
 	for rows.Next() {
 		var vehicle Vehicle
 		err = rows.Scan(&vehicle.ID, &vehicle.Manufacturer, &vehicle.Model, &vehicle.Year, &vehicle.LastRowID, &vehicle.Location)
 		if err != nil {
-			log.Fatal(err)
+			log.Println("Error processing vehicles from database. Returning empty array", err)
+			return vehicles
 		}
 
 		vehicles = append(vehicles, vehicle)
@@ -73,28 +76,32 @@ func GetAllVehicles(db *sql.DB) []Vehicle {
 
 // Updates the last row id and location for a vehicle
 func UpdateVehicle(db *sql.DB, vehicle *Vehicle) {
-	_, rowIdUpdateErr := db.Exec("UPDATE vehicle SET last_row_id = ? WHERE id = ?", vehicle.LastRowID.String, vehicle.ID)
-	if rowIdUpdateErr != nil {
-		log.Fatal(rowIdUpdateErr)
-	}
-	_, locationUpdateErr := db.Exec("UPDATE vehicle SET branch_location = ? WHERE id = ?", vehicle.Location.String, vehicle.ID)
-	if locationUpdateErr != nil {
-		log.Fatal(locationUpdateErr)
+	_, updateErr := db.Exec("UPDATE vehicle SET last_row_id = ?, ranch_location = ? WHERE id = ?", vehicle.LastRowID.String, vehicle.ID)
+	if updateErr != nil {
+		log.Println("Error updating vehicle", updateErr)
 	}
 }
 
 func GetAllSubscriptions(db *sql.DB, vehicle *Vehicle) []Subscription {
-	rows, err := db.Query("SELECT * FROM subscription WHERE vehicle_id = ?", vehicle.ID)
-	if err != nil {
-		log.Fatal(err)
+	var subscribers []Subscription
+
+	if vehicle == nil {
+		log.Println("Vehicle is nil. Returning empty array")
+		return subscribers
 	}
 
-	var subscribers []Subscription
+	rows, err := db.Query("SELECT id, client_id, vehicle_id FROM subscription WHERE vehicle_id = ?", vehicle.ID)
+	if err != nil {
+		log.Println("Error getting subscriptions from database. Returning empty array", err)
+		return subscribers
+	}
+
 	for rows.Next() {
 		var subscriber Subscription
 		err = rows.Scan(&subscriber.ID, &subscriber.ClientID, &subscriber.VehicleID)
 		if err != nil {
-			log.Fatal(err)
+			log.Println("Error processing subscriptions from database. Returning empty array", err)
+			return subscribers
 		}
 
 		subscribers = append(subscribers, subscriber)
@@ -111,14 +118,16 @@ func CreateSubscription(db *sql.DB, vehicle *Vehicle, clientID string) (*Subscri
 
 	lastId, err := res.LastInsertId()
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Error getting last insert id", err)
+		return nil, err
 	}
 
 	var subscriber Subscription
-	err = db.QueryRow("SELECT * FROM subscription WHERE id = ?", lastId).Scan(&subscriber.ID, &subscriber.ClientID, &subscriber.VehicleID)
+	err = db.QueryRow("SELECT id, client_id, vehicle_id FROM subscription WHERE id = ?", lastId).Scan(&subscriber.ID, &subscriber.ClientID, &subscriber.VehicleID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Error getting subscription", err)
+		return nil, err
 	}
 
 	return &subscriber, nil

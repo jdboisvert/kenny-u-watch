@@ -32,6 +32,7 @@ func CheckForNewVehiclesPosted(vehicle Vehicle) {
 
 	if err != nil {
 		log.Println("Got an error when trying to get inventory listings: ", err)
+		return
 	}
 	if latestListing == nil {
 		log.Println("No listings found for vehicle: ", vehicle)
@@ -90,6 +91,7 @@ func SendUpdateToASubscriber(latestListing *kennyupull.InventoryListing, subscri
 
 	if resp.StatusCode != http.StatusNoContent {
 		log.Println("Got a non-204 status code from the alert consumer when trying to send an alert: ", resp.StatusCode)
+		return
 	}
 
 	defer resp.Body.Close()
