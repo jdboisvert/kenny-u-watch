@@ -76,7 +76,7 @@ func GetAllVehicles(db *sql.DB) []Vehicle {
 
 // Updates the last row id and location for a vehicle
 func UpdateVehicle(db *sql.DB, vehicle *Vehicle) {
-	_, updateErr := db.Exec("UPDATE vehicle SET last_row_id = ?, ranch_location = ? WHERE id = ?", vehicle.LastRowID.String, vehicle.ID)
+	_, updateErr := db.Exec("UPDATE vehicle SET last_row_id = ?, branch_location = ? WHERE id = ?", vehicle.LastRowID.String, vehicle.Location.String, vehicle.ID)
 	if updateErr != nil {
 		log.Println("Error updating vehicle", updateErr)
 	}

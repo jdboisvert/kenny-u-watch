@@ -42,6 +42,10 @@ func TestGetOrCreateVehicle_ReturnWhenExists(t *testing.T) {
 	if vehicle.Year != "2018" {
 		t.Errorf("Expected vehicle year to be 2018, got %s", vehicle.Year)
 	}
+
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
 }
 
 func TestGetOrCreateVehicle_CreateWhenDoesNotExist(t *testing.T) {
@@ -82,6 +86,10 @@ func TestGetOrCreateVehicle_CreateWhenDoesNotExist(t *testing.T) {
 	if vehicle.Year != "2018" {
 		t.Errorf("Expected vehicle year to be 2018, got %s", vehicle.Year)
 	}
+
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
 }
 
 func TestGetAllVehicles_NoVehiclesFound(t *testing.T) {
@@ -101,6 +109,10 @@ func TestGetAllVehicles_NoVehiclesFound(t *testing.T) {
 
 	if len(vehicles) != 0 {
 		t.Errorf("Expected no vehicles, got %d", len(vehicles))
+	}
+
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
 	}
 }
 
@@ -171,6 +183,10 @@ func TestGetAllVehicles_VehiclesFound(t *testing.T) {
 		t.Errorf("Expected vehicle branch location to be Cornwall, got %s", vehicles[1].Location.String)
 	}
 
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
+
 }
 
 func TestGetAllVehicles_Error(t *testing.T) {
@@ -189,6 +205,10 @@ func TestGetAllVehicles_Error(t *testing.T) {
 	if len(vehicles) != 0 {
 		t.Errorf("Expected no vehicles, got %d", len(vehicles))
 	}
+
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
 }
 
 func TestUpdateVehicle_UpdateCorrectly(t *testing.T) {
@@ -204,6 +224,10 @@ func TestUpdateVehicle_UpdateCorrectly(t *testing.T) {
 
 	vehicle := Vehicle{ID: 1, Manufacturer: "Toyota", Model: "Corolla", Year: "1996", LastRowID: sql.NullString{String: "E27", Valid: true}, Location: sql.NullString{String: "Ottawa", Valid: true}}
 	UpdateVehicle(db, &vehicle)
+
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
 }
 
 func TestUpdateVehicle_Error(t *testing.T) {
@@ -221,6 +245,10 @@ func TestUpdateVehicle_Error(t *testing.T) {
 
 	// Expects it to simply not crash.
 	UpdateVehicle(db, &vehicle)
+
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
 }
 
 func TestGetAllSubscriptions_NoSubscriptionsFound(t *testing.T) {
