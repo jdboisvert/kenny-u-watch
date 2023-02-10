@@ -53,6 +53,9 @@ Once installed, you can start the MySQL server with the following command:
 
 You will find the SQL scripts to create the database and tables in the `./sql/` directory named `create_tables.sql`. Run this script to create the database and tables locally by connecting to your local MySQL server and running the script.
 
+Downloading dependencies
+    go mod download
+
 ### Environment Variables
 Make a copy of the `.env.example` file and rename it to `.env`. This file contains all the environment variables needed to run the application locally.
 
