@@ -10,9 +10,6 @@ push = false
 "README.md"  = [
     "{version}"
 ]
-"VERSION" = [
-    "{version}"
-]
 "version/version.go" = [
     "version"
 ]
