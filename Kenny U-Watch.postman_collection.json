@@ -1050,6 +1050,124 @@
 							]
 						}
 					]
+				},
+				{
+					"name": "Listing Consumer",
+					"item": [
+						{
+							"name": "New Listing Webhook",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"year\": \"2009\",\n    \"make\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"date_listed\": \"2023-01-29\",\n    \"row_id\": \"E29\",\n    \"branch\": \"Ottawa\",\n    \"listing_url\": \"https://kennyupull.com/part/honda-civic-2010-48/\",\n    \"client_id\": \"610ab24a-dc36-44d0-9dbb-afe7551afcd5\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/listing-consumer/v1/new-listing",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"listing-consumer",
+										"v1",
+										"new-listing"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "New Listing Webhook - 204",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"year\": \"2009\",\n    \"make\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"date_listed\": \"2023-01-29\",\n    \"row_id\": \"E29\",\n    \"branch\": \"Ottawa\",\n    \"listing_url\": \"https://kennyupull.com/part/honda-civic-2010-48/\",\n    \"client_id\": \"610ab24a-dc36-44d0-9dbb-afe7551afcd5\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/listing-consumer/v1/new-listing",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"listing-consumer",
+												"v1",
+												"new-listing"
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 11 Feb 2023 20:13:59 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.9.9"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept"
+										},
+										{
+											"key": "Allow",
+											"value": "OPTIONS, POST"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Length",
+											"value": "2"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{}"
+								}
+							]
+						}
+					]
 				}
 			]
 		},
