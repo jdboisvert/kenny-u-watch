@@ -13,3 +13,6 @@ This repository contains the backend code that interacts with a frontend and is 
 
 ## Alert Producer
 This application is responsible for producing alerts to the user. It is meant to be run as a cron job. It will check the inventory page for new vehicles and send an email an alert to all subscribers about the given vehicle (in this case to the User Watch Management system). Please read the [README](https://github.com/jdboisvert/kenny-u-watch/tree/main/alert-producer#readme) section for more information about the application and how to get it running.
+
+## Want to try it out locally?
+If you want to run it locally a quick and easy way is to use Postman. You can import the collection from the root of this project and use it to test the application.
