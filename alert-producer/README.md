@@ -53,6 +53,9 @@ Once installed, you can start the MySQL server with the following command:
 
 You will find the SQL scripts to create the database and tables in the `./sql/` directory named `create_tables.sql`. Run this script to create the database and tables locally by connecting to your local MySQL server and running the script.
 
+Downloading dependencies
+    go mod download
+
 ### Environment Variables
 Make a copy of the `.env.example` file and rename it to `.env`. This file contains all the environment variables needed to run the application locally.
 
@@ -81,3 +84,23 @@ You can run all tests with the following command:
 
     # run the server
     go run .
+
+### Running via Docker
+
+To make it easier to test you can also run the application via Docker. For now the table creation is manual and you will need to run the SQL scripts in the `./sql/` directory named `create_tables.sql` to create the database and tables locally by connecting to your image's MySQL server and running the script.
+
+This can be done by opening a terminal in the container and running the following command:
+
+    mysql -u root -p
+
+You will be prompted for a password. The password is set in the `./.env` file and is `password` by default.
+
+A key thing to do before building is ensure the .env file values are set correctly and set up in the environment variables.
+
+Build the images
+
+    docker compose build
+
+Run the containers
+
+    docker compose up
