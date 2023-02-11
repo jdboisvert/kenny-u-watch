@@ -3,6 +3,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db import transaction
+from django.conf import settings
+# import requests
 
 
 from alerts.models import Alert, Vehicle
@@ -58,13 +61,32 @@ def create_alert(request):
         return JsonResponse(create_serializer.errors, safe=False, status=status.HTTP_400_BAD_REQUEST)
 
     valid_data = create_serializer.validated_data
-    vehicle, _ = Vehicle.objects.get_or_create(
-        manufacturer_name=valid_data["vehicle"]["manufacturer_name"],
-        model_name=valid_data["vehicle"]["model_name"],
-        model_year=valid_data["vehicle"]["model_year"],
-    )
 
-    alert = Alert.objects.create(user=user, vehicle=vehicle, branch=valid_data.get("branch"))
+    with transaction.atomic():
+        vehicle, _ = Vehicle.objects.get_or_create(
+            manufacturer_name=valid_data["vehicle"]["manufacturer_name"],
+            model_name=valid_data["vehicle"]["model_name"],
+            model_year=valid_data["vehicle"]["model_year"],
+        )
+
+        alert = Alert.objects.create(user=user, vehicle=vehicle, branch=valid_data.get("branch"))
+
+        # Subscribe to the alert to receive notifications.
+        # response = requests.post(
+        #     settings.ALERT_PRODUCER_URL,
+        #     json={
+        #         "model": vehicle.model_name,
+        #         "manufacturer": vehicle.manufacturer_name,
+        #         "year": vehicle.model_year,
+        #         "client_id": str(alert.external_id),
+        #     }
+        # )
+
+        # if not response.ok:
+        #     # TODO - make this a custom exception.
+        #     raise Exception("Failed to subscribe to alert.")
+
+
     alert_serializer = AlertSerializer(alert)
 
     return JsonResponse(alert_serializer.data, status=status.HTTP_201_CREATED)

@@ -1,0 +1,1263 @@
+{
+	"info": {
+		"_postman_id": "f614b4b9-da67-43ed-afd2-a559c41eee1b",
+		"name": "Kenny U-Watch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User Alert Management",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Obtain Token (Login)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();",
+											"console.log(responseJson);",
+											"if(typeof responseJson.access !== 'undefined'){",
+											"    pm.environment.set(\"auth_token\", responseJson.access);",
+											"}",
+											"if(typeof responseJson.refresh !== 'undefined'){",
+											"    pm.environment.set(\"refresh_token\", responseJson.refresh);",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"jeffrey@tester.com\", \n    \"password\": \"Pass_good1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/v1/token/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"v1",
+										"token",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh Token",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();",
+											"console.log(responseJson);",
+											"if(typeof responseJson.access !== 'undefined'){",
+											"    pm.environment.set(\"auth_token\", responseJson.access);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/v1/token/refresh/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"v1",
+										"token",
+										"refresh",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Signup",
+					"item": [
+						{
+							"name": "Obtain Token Sign up",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"jeffrey@tester.com\", \n    \"email\": \"jeffrey@tester.com\",\n    \"password\": \"Pass_good1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/signup/v1/new",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"signup",
+										"v1",
+										"new"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Valid Sign up",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"username\": \"jeffrey@tester.com\", \n    \"email\": \"jeffrey@tester.com\",\n    \"password\": \"Pass_good1\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/signup/v1/new",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"signup",
+												"v1",
+												"new"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 11 Feb 2023 19:47:13 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.9.9"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept"
+										},
+										{
+											"key": "Allow",
+											"value": "OPTIONS, POST"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Length",
+											"value": "2"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Alerts",
+					"item": [
+						{
+							"name": "V1",
+							"item": [
+								{
+									"name": "Create Alert",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"vehicle\": { \n        \"manufacturer_name\": \"Toyota\",\n        \"model_name\": \"Corolla\",\n        \"model_year\": \"2008\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/alerts/v1/create-alert",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"alerts",
+												"v1",
+												"create-alert"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Create Alert - 201",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"vehicle\": { \n        \"manufacturer_name\": \"Toyota\",\n        \"model_name\": \"Corolla\",\n        \"model_year\": \"2008\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://127.0.0.1:8000/alerts/v1/create-alert",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"alerts",
+														"v1",
+														"create-alert"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sat, 11 Feb 2023 19:51:11 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "WSGIServer/0.2 CPython/3.9.9"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept"
+												},
+												{
+													"key": "Allow",
+													"value": "OPTIONS, POST"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Length",
+													"value": "201"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Cross-Origin-Opener-Policy",
+													"value": "same-origin"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": 2,\n    \"vehicle\": {\n        \"manufacturer_name\": \"Toyota\",\n        \"model_name\": \"Corolla\",\n        \"model_year\": \"2008\"\n    },\n    \"branch\": null,\n    \"created\": \"2023-02-11T19:51:11.115870Z\",\n    \"modified\": \"2023-02-11T19:51:11.115884Z\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Update Alert",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"vehicle\": { \n        \"manufacturer_name\": \"Toyota\",\n        \"model_name\": \"Corolla\",\n        \"model_year\": \"2008\"\n    },\n    \"branch\": \"Ottawa\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/alerts/v1/update-alert/2",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"alerts",
+												"v1",
+												"update-alert",
+												"2"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Update Alert - 200",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"vehicle\": { \n        \"manufacturer_name\": \"Toyota\",\n        \"model_name\": \"Corolla\",\n        \"model_year\": \"2008\"\n    },\n    \"branch\": \"Ottawa\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://127.0.0.1:8000/alerts/v1/update-alert/2",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"alerts",
+														"v1",
+														"update-alert",
+														"2"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sat, 11 Feb 2023 20:01:59 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "WSGIServer/0.2 CPython/3.9.9"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept"
+												},
+												{
+													"key": "Allow",
+													"value": "PUT, OPTIONS"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Length",
+													"value": "205"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Cross-Origin-Opener-Policy",
+													"value": "same-origin"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": 2,\n    \"vehicle\": {\n        \"manufacturer_name\": \"Toyota\",\n        \"model_name\": \"Corolla\",\n        \"model_year\": \"2008\"\n    },\n    \"branch\": \"Ottawa\",\n    \"created\": \"2023-02-11T19:51:11.115870Z\",\n    \"modified\": \"2023-02-11T20:01:59.133330Z\"\n}"
+										},
+										{
+											"name": "Update Alert - 400 no fields to update",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"vehicle\": { \n        \"manufacturer_name\": \"Toyota\",\n        \"model_name\": \"Corolla\",\n        \"model_year\": \"2008\"\n    },\n    \"branch\": \"Ottawa\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://127.0.0.1:8000/alerts/v1/update-alert/2",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"alerts",
+														"v1",
+														"update-alert",
+														"2"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sat, 11 Feb 2023 20:02:17 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "WSGIServer/0.2 CPython/3.9.9"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept"
+												},
+												{
+													"key": "Allow",
+													"value": "PUT, OPTIONS"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Length",
+													"value": "30"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Cross-Origin-Opener-Policy",
+													"value": "same-origin"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"error\": \"Alert not updated\"\n}"
+										},
+										{
+											"name": "Update Alert - 404",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"vehicle\": { \n        \"manufacturer_name\": \"Toyota\",\n        \"model_name\": \"Corolla\",\n        \"model_year\": \"2008\"\n    },\n    \"branch\": \"Ottawa\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://127.0.0.1:8000/alerts/v1/update-alert/2",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"alerts",
+														"v1",
+														"update-alert",
+														"2"
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sat, 11 Feb 2023 20:04:21 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "WSGIServer/0.2 CPython/3.9.9"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept"
+												},
+												{
+													"key": "Allow",
+													"value": "PUT, OPTIONS"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Length",
+													"value": "33"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Cross-Origin-Opener-Policy",
+													"value": "same-origin"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"error\": \"Alert does not exist\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete Alert",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://127.0.0.1:8000/alerts/v1/delete-alert/2",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"alerts",
+												"v1",
+												"delete-alert",
+												"2"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Delete Alert - 204",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "http://127.0.0.1:8000/alerts/v1/delete-alert/2",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"alerts",
+														"v1",
+														"delete-alert",
+														"2"
+													]
+												}
+											},
+											"status": "No Content",
+											"code": 204,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sat, 11 Feb 2023 20:03:49 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "WSGIServer/0.2 CPython/3.9.9"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept"
+												},
+												{
+													"key": "Allow",
+													"value": "OPTIONS, DELETE"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Length",
+													"value": "2"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Cross-Origin-Opener-Policy",
+													"value": "same-origin"
+												}
+											],
+											"cookie": [],
+											"body": "{}"
+										},
+										{
+											"name": "Delete Alert - 404",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "http://127.0.0.1:8000/alerts/v1/delete-alert/2",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"alerts",
+														"v1",
+														"delete-alert",
+														"2"
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sat, 11 Feb 2023 20:04:06 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "WSGIServer/0.2 CPython/3.9.9"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept"
+												},
+												{
+													"key": "Allow",
+													"value": "OPTIONS, DELETE"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Length",
+													"value": "33"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Cross-Origin-Opener-Policy",
+													"value": "same-origin"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"error\": \"Alert does not exist\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get Alert",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://127.0.0.1:8000/alerts/v1/get-alert/2",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"alerts",
+												"v1",
+												"get-alert",
+												"2"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Get Alert - 200",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "http://127.0.0.1:8000/alerts/v1/get-alert/2",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"alerts",
+														"v1",
+														"get-alert",
+														"2"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sat, 11 Feb 2023 19:59:11 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "WSGIServer/0.2 CPython/3.9.9"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept"
+												},
+												{
+													"key": "Allow",
+													"value": "GET, OPTIONS"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Length",
+													"value": "201"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Cross-Origin-Opener-Policy",
+													"value": "same-origin"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": 2,\n    \"vehicle\": {\n        \"manufacturer_name\": \"Toyota\",\n        \"model_name\": \"Corolla\",\n        \"model_year\": \"2008\"\n    },\n    \"branch\": null,\n    \"created\": \"2023-02-11T19:51:11.115870Z\",\n    \"modified\": \"2023-02-11T19:51:11.115884Z\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get Alerts",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{auth_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://127.0.0.1:8000/alerts/v1/get-alerts",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"alerts",
+												"v1",
+												"get-alerts"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Get Alerts - 200",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "http://127.0.0.1:8000/alerts/v1/get-alerts",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"alerts",
+														"v1",
+														"get-alerts"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sat, 11 Feb 2023 19:59:44 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "WSGIServer/0.2 CPython/3.9.9"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept"
+												},
+												{
+													"key": "Allow",
+													"value": "GET, OPTIONS"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Length",
+													"value": "406"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Cross-Origin-Opener-Policy",
+													"value": "same-origin"
+												}
+											],
+											"cookie": [],
+											"body": "[\n    {\n        \"id\": 2,\n        \"vehicle\": {\n            \"manufacturer_name\": \"Toyota\",\n            \"model_name\": \"Corolla\",\n            \"model_year\": \"2008\"\n        },\n        \"branch\": null,\n        \"created\": \"2023-02-11T19:51:11.115870Z\",\n        \"modified\": \"2023-02-11T19:51:11.115884Z\"\n    },\n    {\n        \"id\": 3,\n        \"vehicle\": {\n            \"manufacturer_name\": \"Toyota\",\n            \"model_name\": \"Corolla\",\n            \"model_year\": \"2008\"\n        },\n        \"branch\": null,\n        \"created\": \"2023-02-11T19:56:53.820856Z\",\n        \"modified\": \"2023-02-11T19:56:53.820866Z\"\n    }\n]"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Alert Producer",
+			"item": [
+				{
+					"name": "Subscribe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"year\": \"2008\",\n    \"client_id\": \"9dac0ac2-87d7-4a05-bac2-96aaf86758b1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/subscribe-vehicle",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"subscribe-vehicle"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Subscribe - 201",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"year\": \"2007\",\n    \"client_id\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/v1/subscribe-vehicle",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"subscribe-vehicle"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Feb 2023 19:15:42 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "101"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"year\": \"2007\",\n    \"client_id\": \"1234\"\n}"
+						},
+						{
+							"name": "Subscribe - 400 already subscribed",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"year\": \"2007\",\n    \"client_id\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/v1/subscribe-vehicle",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"subscribe-vehicle"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Feb 2023 19:17:14 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"Error subscribing to vehicle\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Unsubscribe",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"year\": \"2008\",\n    \"client_id\": \"1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/unsubscribe-from-vehicle",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"unsubscribe-from-vehicle"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Unsubscribe - 200",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"year\": \"2007\",\n    \"client_id\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/v1/unsubscribe-from-vehicle",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"unsubscribe-from-vehicle"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Feb 2023 19:24:43 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "101"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"year\": \"2007\",\n    \"client_id\": \"1234\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
