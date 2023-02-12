@@ -1,0 +1,39 @@
+.Signup {
+    background-color: #f3f3f3;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+    max-width: 500px;
+    margin: 50px auto;
+  }
+
+  .Signup h2 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .Signup label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .Signup input[type="email"],
+  .Signup input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .Signup button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
