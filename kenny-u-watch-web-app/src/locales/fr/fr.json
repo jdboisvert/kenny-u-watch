@@ -1,0 +1,56 @@
+{
+  "header":{
+     "title":"Kenny U-Watch"
+  },
+  "dashboard":{
+     "title":"Tableau de bord"
+  },
+  "createAlert":{
+     "title":"Créer une alerte"
+  },
+  "searchBar":{
+     "title":"Recherche"
+  },
+  "sortBy": {
+     "title":"Trier par"
+  },
+  "newest":{
+     "title":"Le plus récent"
+  },
+  "oldest":{
+     "title":"Le plus ancien"
+  },
+  "alphabetical":{
+     "title":"Alphabétique"
+  },
+  "delete":{
+     "title":"Supprimer"
+  },
+  "created":{
+     "title":"Créé"
+  },
+  "footer":{
+     "title":"Kenny U-Watch par jdboisvert"
+  },
+  "manufacturer":{
+     "title":"Fabricant"
+  },
+  "model":{
+     "title":"Modèle"
+  },
+  "year":{
+     "title":"Année"
+  },
+  "email":{
+     "title":"Email"
+  },
+  "password":{
+     "title":"Mot de passe"
+  },
+  "login":{
+     "title":"S'identifier"
+  },
+  "signUp":{
+     "title":"S'inscrire"
+  }
+}

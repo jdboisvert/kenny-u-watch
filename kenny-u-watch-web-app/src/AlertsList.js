@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AlertsList.css';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import useSessionStorage from './useSessionStorage';
 
@@ -10,6 +11,8 @@ const AlertsList = () => {
   const [sortBy, setSortBy] = useState('alphabetical');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredAlerts, setFilteredAlerts] = useState([]);
+
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -129,22 +132,22 @@ const AlertsList = () => {
       <input
         className="search-input"
         type="text"
-        placeholder="Search..."
+        placeholder={`${t("searchBar.title")}...`}
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.target.value)}
       />
-        <span className="sort-label">Sort by: </span>
+        <span className="sort-label">{t('sortBy.title')}: </span>
         <select className="sort-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-          <option  value="newest">Newest</option>
-          <option  value="oldest">Oldest</option>
-          <option value="alphabetical">Alphabetical</option>
+          <option  value="newest">{t('newest.title')}</option>
+          <option  value="oldest">{t('oldest.title')}</option>
+          <option value="alphabetical">{t('alphabetical.title')}</option>
         </select>
       </div>
       {filteredAlerts.map((alert) => (
       <div className="Alert" key={alert.id}>
         <h3 className="Alert-Title">{alert.vehicle.manufacturer_name} {alert.vehicle.model_name} ({alert.vehicle.model_year})</h3>
-        <p className="Alert-Date">Created: {formatDate(alert.created)}</p>
-        <button className="delete-button" onClick={() => deleteAlert(alert.id)}>Delete</button>
+        <p className="Alert-Date">{t('created.title')}: {formatDate(alert.created)}</p>
+        <button className="delete-button" onClick={() => deleteAlert(alert.id)}>{t('delete.title')}</button>
       </div>
     ))}
     </div>

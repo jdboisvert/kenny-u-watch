@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Signup.css';
 import {useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 const Signup = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
+
+  const {t} = useTranslation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,7 +33,7 @@ const Signup = (props) => {
     <form className="Signup" onSubmit={handleSubmit}>
       <h2>Sign Up</h2>
       <div>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">{t('email.title')}:</label>
         <input
           type="email"
           id="email"
@@ -39,7 +42,7 @@ const Signup = (props) => {
         />
       </div>
       <div>
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password">{t('password.title')}:</label>
         <input
           type="password"
           id="password"
@@ -47,7 +50,7 @@ const Signup = (props) => {
           onChange={(event) => setPassword(event.target.value)}
         />
       </div>
-      <button type="submit">Sign Up</button>
+      <button type="submit">{t('signUp.title')}</button>
     </form>
   );
 };

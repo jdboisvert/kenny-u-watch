@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Login.css';
 import axios from 'axios';
 import useSessionStorage from './useSessionStorage';
+import { useTranslation } from 'react-i18next';
 
 import {useNavigate} from 'react-router-dom';
 
@@ -11,6 +12,8 @@ const Login = () => {
 
   const [access, setAccess] = useSessionStorage('access', '');
   const [refresh, setRefresh] = useSessionStorage('refresh', '');
+
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -33,9 +36,11 @@ const Login = () => {
 
   return (
     <form className="Login" onSubmit={handleSubmit}>
-      <h2>Kenny U-Watch</h2>
+      <h2>
+        {t('header.title')}
+      </h2>
       <div>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">{t('email.title')}:</label>
         <input
           type="email"
           id="email"
@@ -44,7 +49,7 @@ const Login = () => {
         />
       </div>
       <div>
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password">{t('password.title')}:</label>
         <input
           type="password"
           id="password"
@@ -52,7 +57,7 @@ const Login = () => {
           onChange={(event) => setPassword(event.target.value)}
         />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">{t('login.title')}:</button>
     </form>
   );
 };

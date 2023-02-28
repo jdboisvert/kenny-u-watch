@@ -10,6 +10,8 @@ import CreateAlert from './CreateAlert';
 import Footer from './Footer';
 import Header from './Header';
 
+import './i18n';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -4,6 +4,8 @@ import axios from 'axios';
 import useSessionStorage from './useSessionStorage';
 
 import {useNavigate} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 
 import './CreateAlert.css';
 
@@ -14,6 +16,8 @@ const CreateAlert = () => {
 
   const [access, setAccess] = useSessionStorage('access', '');
   const [refresh, setRefresh] = useSessionStorage('refresh', '');
+
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -75,7 +79,7 @@ const CreateAlert = () => {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Manufacturer Name:
+        {t('manufacturer.title')}:
         <input
           type="text"
           value={manufacturerName}
@@ -84,7 +88,7 @@ const CreateAlert = () => {
       </label>
       <br />
       <label>
-        Model Name:
+        {t('model.title')}:
         <input
           type="text"
           value={modelName}
@@ -93,7 +97,7 @@ const CreateAlert = () => {
       </label>
       <br />
       <label>
-        Model Year:
+        {t('year.title')}:
         <input
           type="text"
           value={modelYear}
@@ -101,7 +105,7 @@ const CreateAlert = () => {
         />
       </label>
       <br />
-      <button type="submit">Create Alert</button>
+      <button type="submit">{t('createAlert.title')}</button>
     </form>
   );
 };
