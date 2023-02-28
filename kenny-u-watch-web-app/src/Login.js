@@ -1,17 +1,31 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './Login.css';
+import axios from 'axios';
+import useSessionStorage from './useSessionStorage';
 
 const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [access, setAccess] = useSessionStorage('access', '');
+  const [refresh, setRefresh] = useSessionStorage('refresh', '');
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('/api/login', { email, password });
-      localStorage.setItem('token', response.data.token);
-      props.history.push('/');
+      const response = await axios.post('http://127.0.0.1:8000/api/v1/token/', {
+        username: email,
+        password,
+      });
+
+      console.log(response.data);  // TODO just for testing. Remove this line.
+
+      const { access, refresh } = response.data;
+      setAccess(access);
+      setRefresh(refresh);
+
+      console.log('access', access);  // TODO just for testing. Remove this line.
+      console.log('refresh', refresh);  // TODO just for testing. Remove this line.
     } catch (error) {
       console.error(error);
     }
