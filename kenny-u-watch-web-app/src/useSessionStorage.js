@@ -4,7 +4,7 @@ const useSessionStorage = (key, initialValue) => {
   const [storedValue, setStoredValue] = useState(() => {
     try {
       const item = sessionStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      return item ? item : initialValue;
     } catch (error) {
       console.log(error);
       return initialValue;
@@ -14,7 +14,7 @@ const useSessionStorage = (key, initialValue) => {
   const setValue = (value) => {
     try {
       setStoredValue(value);
-      sessionStorage.setItem(key, JSON.stringify(value));
+      sessionStorage.setItem(key, value);
     } catch (error) {
       console.log(error);
     }

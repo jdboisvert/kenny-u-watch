@@ -3,12 +3,16 @@ import './Login.css';
 import axios from 'axios';
 import useSessionStorage from './useSessionStorage';
 
+import {useNavigate} from 'react-router-dom';
+
 const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const [access, setAccess] = useSessionStorage('access', '');
   const [refresh, setRefresh] = useSessionStorage('refresh', '');
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -24,8 +28,7 @@ const Login = (props) => {
       setAccess(access);
       setRefresh(refresh);
 
-      console.log('access', access);  // TODO just for testing. Remove this line.
-      console.log('refresh', refresh);  // TODO just for testing. Remove this line.
+      navigate('/dashboard');
     } catch (error) {
       console.error(error);
     }

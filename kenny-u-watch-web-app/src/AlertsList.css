@@ -1,0 +1,66 @@
+.AlertsList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .Alert {
+    width: 80%;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .Alert-Title {
+    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  .Alert-Date {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  button.delete-button {
+    background-color: #da291c;
+    color: white;
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    float: right;
+  }
+
+  .sort-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin: 20px;
+
+  }
+
+  .search-input {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+  }
+
+  .sort-label {
+    margin-right: 10px;
+    font-size: 14px;
+  }
+
+  .sort-select {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }

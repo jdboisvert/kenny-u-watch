@@ -1,0 +1,40 @@
+.header {
+    background-color: #da291c;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+  }
+
+  .header-title {
+    margin: 0;
+  }
+
+  .header-menu {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    float: le;
+  }
+
+  .header-menu-item {
+    margin-left: 20px;
+  }
+
+  .header-menu-item a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    padding: 10px;
+  }
+
+  .header-menu-item.active a {
+    border-bottom: 2px solid white;
+  }

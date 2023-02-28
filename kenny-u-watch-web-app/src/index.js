@@ -2,23 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+
 import Login from './Login';
 import Signup from './Signup';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import AlertsList from './AlertsList';
+import CreateAlert from './CreateAlert';
+import Footer from './Footer';
+import Header from './Header';
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <div className="app">
     <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Signup />} />
-      </Routes>
-      <div style={{ textAlign: 'center' }}>
-        <Link to="/login" style={{ display: 'inline-block', padding: '10px 20px', backgroundColor: '#3f51b5', color: 'white', textDecoration: 'none', borderRadius: '5px' }}>
-          Login
-        </Link>
+      <Header />
+      <div className="content">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Signup />} />
+          <Route path="/dashboard" element={<AlertsList />} />
+          <Route path="/create-alert" element={<CreateAlert />} />
+        </Routes>
       </div>
     </Router>
+    <Footer />
+  </div>
 );
 
 // If you want to start measuring performance in your app, pass a function
