@@ -21,6 +21,7 @@ root.render(
       <Header />
       <div className="content">
         <Routes>
+          <Route path="/" element={<AlertsList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<AlertsList />} />
