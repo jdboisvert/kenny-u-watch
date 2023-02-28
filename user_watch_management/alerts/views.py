@@ -4,10 +4,11 @@ from rest_framework import status
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-
-from alerts.models import Alert, Vehicle
+from alerts.models import Alert
 from alerts.serializers import AlertSerializer, CreateAlertSerializer
 from alerts.constants import ALERT_NOT_UPDATED_MESSAGE, ALERT_DOES_NOT_EXIST_MESSAGE
+from alerts.exceptions import SubscriptionFailureException
+from alerts.utils import handle_create_alert
 
 
 @api_view(["GET"])
@@ -58,16 +59,22 @@ def create_alert(request):
         return JsonResponse(create_serializer.errors, safe=False, status=status.HTTP_400_BAD_REQUEST)
 
     valid_data = create_serializer.validated_data
-    vehicle, _ = Vehicle.objects.get_or_create(
-        manufacturer_name=valid_data["vehicle"]["manufacturer_name"],
-        model_name=valid_data["vehicle"]["model_name"],
-        model_year=valid_data["vehicle"]["model_year"],
-    )
 
-    alert = Alert.objects.create(user=user, vehicle=vehicle, branch=valid_data.get("branch"))
-    alert_serializer = AlertSerializer(alert)
+    try:
+        alert = handle_create_alert(
+            manufacturer_name=valid_data["vehicle"]["manufacturer_name"],
+            model_name=valid_data["vehicle"]["model_name"],
+            model_year=valid_data["vehicle"]["model_year"],
+            user=user,
+            branch=valid_data.get("branch"),
+        )
 
-    return JsonResponse(alert_serializer.data, status=status.HTTP_201_CREATED)
+        alert_serializer = AlertSerializer(alert)
+
+        return JsonResponse(alert_serializer.data, status=status.HTTP_201_CREATED)
+
+    except SubscriptionFailureException as e:
+        return JsonResponse({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(["PUT"])
@@ -115,6 +122,8 @@ def update_alert(request, alert_id: int):
         if alert_fields_to_update:
             alert.save()
 
+        # TODO - update subscription from alert producer
+
         serializer = AlertSerializer(alert)
 
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
@@ -135,6 +144,8 @@ def delete_alert(request, alert_id: int):
     try:
         alert = Alert.objects.get(user=user, id=alert_id)
         alert.delete()
+
+        # TODO - delete subscription from alert producer
         return JsonResponse({}, status=status.HTTP_204_NO_CONTENT)
 
     except Alert.DoesNotExist:
