@@ -26,8 +26,8 @@ eval "$(pyenv virtualenv-init -)"
 source ~/.zshrc
 
 # create a virtualenv
-pyenv install 0.2.0
-pyenv virtualenv 0.2.0 user_watch_management
+pyenv install 3.11.0
+pyenv virtualenv 3.11.0 user_watch_management
 pyenv activate user_watch_management
 
 # install dependencies
@@ -132,7 +132,7 @@ The application can be run via Docker. The following commands will build the ima
 
 First time building the image or rebuilding the image:
 ```bash
-docker compose build
+docker compose build --no-cache
 ```
 To run the container:
 ```bash
@@ -168,6 +168,23 @@ result.get() # should return the result expected in this case None
 #### Example to run tests via Docker
 ```bash
 docker compose exec web python manage.py test
+```
+
+### Running locally
+```bash
+python manage.py runserver 0.0.0.0:8000
+```
+
+To install Postgres locally, you can use [Homebrew](https://brew.sh/):
+
+```bash
+brew install postgresql
+```
+
+Then run
+
+```bash
+brew services start postgresql
 ```
 
 ### PRs and Releases

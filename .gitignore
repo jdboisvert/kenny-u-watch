@@ -137,3 +137,6 @@ coverage_html_report/*
 
 # Apple MacOS
 .DS_Store
+
+# NodeJS
+*node_modules/*
