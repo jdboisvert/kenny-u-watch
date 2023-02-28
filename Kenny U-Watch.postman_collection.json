@@ -62,7 +62,88 @@
 									]
 								}
 							},
-							"response": []
+							"response": [
+								{
+									"name": "Obtain Token (Login) - 200",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"username\": \"jeffrey@tester.com\", \n    \"password\": \"Pass_good1\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/api/v1/token/",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"v1",
+												"token",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Tue, 28 Feb 2023 19:49:53 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.10.9"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Length",
+											"value": "483"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3NzcwMDE5MywiaWF0IjoxNjc3NjEzNzkzLCJqdGkiOiIwZWRjNmM0NjY2NWQ0NDFiYjEyMzYxYjhhYWYzNmQwNiIsInVzZXJfaWQiOjF9.wkWO7UHQzg1FDEsqMF66a3alIF9Ebmv3lCos6heE8yU\",\n    \"access\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3NjE0MDkzLCJpYXQiOjE2Nzc2MTM3OTMsImp0aSI6ImNmM2Y1NTc4Njc0ODQ3OTM4YTM1Yjk1YTFjMzcwOGMzIiwidXNlcl9pZCI6MX0.rctbLSFKVuvN8jgKo7XaTWR8be4GdSoL4tMLcxJHa1o\"\n}"
+								}
+							]
 						},
 						{
 							"name": "Refresh Token",
@@ -121,7 +202,89 @@
 									]
 								}
 							},
-							"response": []
+							"response": [
+								{
+									"name": "Refresh Token - 200",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/api/v1/token/refresh/",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"v1",
+												"token",
+												"refresh",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Tue, 28 Feb 2023 19:49:56 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.10.9"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Length",
+											"value": "483"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"access\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3NjE0MDk2LCJpYXQiOjE2Nzc2MTM3OTMsImp0aSI6ImVlNjViODAxNDI1NDQ2MWFiNWJlM2FhNmQ4MTFlNjFlIiwidXNlcl9pZCI6MX0.boCsI42lwKJfFKNwfjaRcfSFno14NT144oGSSe7oidE\",\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3NzcwMDE5NiwiaWF0IjoxNjc3NjEzNzk2LCJqdGkiOiIzYTlkMTcwYTM2YTE0MDQxODg0MzMyYTBlOGE0MjdjNiIsInVzZXJfaWQiOjF9.OmdkYjbnscI56qr8NLEzdd1YPypuseGXo3Qe-Ru4CLo\"\n}"
+								}
+							]
 						}
 					]
 				},
@@ -1181,7 +1344,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"year\": \"2008\",\n    \"client_id\": \"9dac0ac2-87d7-4a05-bac2-96aaf86758b1\"\n}",
+							"raw": "{\n    \"manufacturer\": \"Toyota\",\n    \"model\": \"Corolla\",\n    \"year\": \"2008\",\n    \"client_id\": \"9dac0ac2-87d7-4a05-bac2-96aaf86758c1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1189,10 +1352,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/v1/subscribe-vehicle",
+							"raw": "http://127.0.0.1:8080/v1/subscribe-vehicle",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"127",
+								"0",
+								"0",
+								"1"
 							],
 							"port": "8080",
 							"path": [
