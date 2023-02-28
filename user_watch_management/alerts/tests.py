@@ -3,6 +3,7 @@ from typing import Optional
 from unittest import mock
 from uuid import uuid4
 from django.test import TestCase
+from requests import Response
 
 from alerts.models import Vehicle, Alert
 from django.contrib.auth.models import User
@@ -11,6 +12,8 @@ from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from alerts.constants import ALERT_NOT_UPDATED_MESSAGE
+from alerts.utils import handle_create_alert
+from alerts.exceptions import SubscriptionFailureException
 
 
 def create_alert_as_dict(alert: Alert) -> dict:
@@ -177,11 +180,15 @@ class CreateAlertsTests(TestCase):
 
         return super().setUp()
 
-    def test_create_alert_with_valid_data(self):
+    @mock.patch("alerts.views.handle_create_alert")
+    def test_create_alert_with_valid_data(self, mock_handle_create_alert):
         manufacturer_name = "Toyota"
         model_name = "Corolla"
         model_year = "1996"
         branch = "Test Branch"
+
+        alert = Alert.objects.create(user=self.user, vehicle=Vehicle.objects.create(manufacturer_name=manufacturer_name, model_year=model_year, model_name=model_name), branch=branch)
+        mock_handle_create_alert.return_value = alert
 
         data = {
             "vehicle": {
@@ -198,22 +205,26 @@ class CreateAlertsTests(TestCase):
 
         content = json.loads(response.content)
         expected_content = {
-            "id": mock.ANY,
+            "id": alert.pk,
             "vehicle": {
                 "model_year": model_year,
                 "manufacturer_name": manufacturer_name,
                 "model_name": model_name,
             },
-            "branch": branch,
-            "created": mock.ANY,
-            "modified": mock.ANY,
+            "branch": alert.branch,
+            "created": alert.created,
+            "modified": alert.modified,
         }
         self.assertCountEqual(content, expected_content)
 
-    def test_create_alert_with_valid_data_without_branch(self):
+    @mock.patch("alerts.views.handle_create_alert")
+    def test_create_alert_with_valid_data_without_branch(self, mock_handle_create_alert):
         manufacturer_name = "Toyota"
         model_name = "Corolla"
         model_year = "1996"
+
+        alert = Alert.objects.create(user=self.user, vehicle=Vehicle.objects.create(manufacturer_name=manufacturer_name, model_year=model_year, model_name=model_name))
+        mock_handle_create_alert.return_value = alert
 
         data = {
             "vehicle": {
@@ -228,15 +239,15 @@ class CreateAlertsTests(TestCase):
 
         content = json.loads(response.content)
         expected_content = {
-            "id": mock.ANY,
+            "id": alert.pk,
             "vehicle": {
                 "model_year": model_year,
                 "manufacturer_name": manufacturer_name,
                 "model_name": model_name,
             },
             "branch": None,
-            "created": mock.ANY,
-            "modified": mock.ANY,
+            "created": alert.created,
+            "modified": alert.modified,
         }
         self.assertCountEqual(content, expected_content)
 
@@ -731,3 +742,60 @@ class GetAlertTestCase(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 404)
+
+
+class HandleCreateAlertTestCase(TestCase):
+
+    @mock.patch('requests.post', return_value=mock.MagicMock(status_code=201, ok=True))
+    def test_handle_create_alert_success(self, mock_post):
+        username_and_email = "tester@test.com"
+        user = User.objects.create_user(username_and_email, username_and_email, str(uuid4()))
+
+        alert = handle_create_alert(
+            user=user,
+            manufacturer_name="Honda",
+            model_name="Civic",
+            model_year="2001",
+            branch="Test branch",
+        )
+
+        self.assertEqual(alert.user, user)
+        self.assertEqual(alert.vehicle.manufacturer_name, "Honda")
+        self.assertEqual(alert.vehicle.model_name, "Civic")
+        self.assertEqual(alert.vehicle.model_year, "2001")
+        self.assertEqual(alert.branch, "Test branch")
+
+        self.assertTrue(
+            Vehicle.objects.filter(
+                model_name="Civic",
+                manufacturer_name="Honda",
+                model_year="2001",
+        ).exists()
+        )
+
+    @mock.patch('requests.post', return_value=mock.MagicMock(status_code=500, ok=False))
+    def test_handle_create_alert_failure(self, mock_post):
+        username_and_email = "tester@test.com"
+        user = User.objects.create_user(username_and_email, username_and_email, str(uuid4()))
+
+        with self.assertRaises(SubscriptionFailureException):
+            handle_create_alert(
+                user=user,
+                manufacturer_name="Honda",
+                model_name="Civic",
+                model_year="2001",
+                branch="Test branch",
+            )
+
+        self.assertFalse(
+            Alert.objects.filter(user=user).exists()
+        )
+
+        self.assertFalse(
+            Vehicle.objects.filter(
+                model_name="Civic",
+                manufacturer_name="Honda",
+                model_year="2001",
+        ).exists()
+
+        )
