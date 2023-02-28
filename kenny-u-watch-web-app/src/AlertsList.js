@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AlertsList.css';
+import { useNavigate } from 'react-router-dom';
 
 import useSessionStorage from './useSessionStorage';
 
@@ -10,10 +11,16 @@ const AlertsList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredAlerts, setFilteredAlerts] = useState([]);
 
+  const navigate = useNavigate();
+
   const [access, setAccess] = useSessionStorage('access', '');
   const [refresh, setRefresh] = useSessionStorage('refresh', '');
 
   useEffect(() => {
+    if (!access) {
+      navigate('/login');
+    }
+
     getAlerts();
     filterAlerts();
   }, [searchTerm, alerts]);

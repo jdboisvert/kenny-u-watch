@@ -20,7 +20,7 @@ root.render(
       <div className="content">
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Signup />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<AlertsList />} />
           <Route path="/create-alert" element={<CreateAlert />} />
         </Routes>

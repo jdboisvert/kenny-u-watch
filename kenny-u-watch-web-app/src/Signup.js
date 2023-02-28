@@ -12,13 +12,12 @@ const Signup = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:8000/signup/v1/new', {
+      await axios.post('http://127.0.0.1:8000/signup/v1/new', {
         email,
         username: email,
         password,
       });
 
-      console.log(response.data);  // TODO just for testing. Remove this line.
       navigate('/login');
     } catch (error) {
       console.error(error);

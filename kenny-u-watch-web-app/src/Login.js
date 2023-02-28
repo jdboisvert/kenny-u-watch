@@ -5,7 +5,7 @@ import useSessionStorage from './useSessionStorage';
 
 import {useNavigate} from 'react-router-dom';
 
-const Login = (props) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -22,11 +22,8 @@ const Login = (props) => {
         password,
       });
 
-      console.log(response.data);  // TODO just for testing. Remove this line.
-
-      const { access, refresh } = response.data;
-      setAccess(access);
-      setRefresh(refresh);
+      setAccess(response.data.access);
+      setRefresh(response.data.refresh);
 
       navigate('/dashboard');
     } catch (error) {
