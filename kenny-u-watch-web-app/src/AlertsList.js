@@ -12,7 +12,7 @@ const AlertsList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredAlerts, setFilteredAlerts] = useState([]);
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -122,7 +122,7 @@ const AlertsList = () => {
       hour: 'numeric',
       minute: 'numeric',
     };
-    return dateObject.toLocaleDateString('en-US', options);
+    return dateObject.toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-US', options);
   };
 
   return (
