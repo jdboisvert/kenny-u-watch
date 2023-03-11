@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Kenny U-Watch",
+  "name": "A React app used to manage alerts on Kenny U-Pull for new listing.",
   "icons": [
     {
       "src": "favicon.ico",
