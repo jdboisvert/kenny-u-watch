@@ -19,14 +19,20 @@ const AlertsList = () => {
   const [access, setAccess] = useSessionStorage('access', '');
   const [refresh, setRefresh] = useSessionStorage('refresh', '');
 
+  // Get alerts only when the component mounts or the access token changes
   useEffect(() => {
     if (!access) {
       navigate('/login');
+    } else {
+      getAlerts();
     }
+  }, [access]);
 
-    getAlerts();
+  // Filter alerts whenever searchTerm or alerts change
+  useEffect(() => {
     filterAlerts();
-  }, [searchTerm, alerts]);
+  }, [searchTerm, alerts, sortBy]);
+
 
   const filterAlerts = () => {
     let filtered = alerts;
