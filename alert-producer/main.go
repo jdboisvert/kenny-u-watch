@@ -12,8 +12,10 @@ import (
 )
 
 func subscribeToVehicle(c *gin.Context) {
+	log.Println("Received a request to /v1/subscribe-vehicle") // Add this line
 	var newVehicle app.VehicleSubscription
 	if err := c.BindJSON(&newVehicle); err != nil {
+		log.Println("Error binding JSON:", err) // And this line
 		return
 	}
 
@@ -58,5 +60,5 @@ func main() {
 	})
 	s.StartAsync()
 
-	router.Run("localhost:8080")
+	router.Run("0.0.0.0:8080")
 }
