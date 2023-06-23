@@ -29,6 +29,25 @@ services:
     volumes:
       - ./alert-producer/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
+  db_django:
+    image: postgres:14-alpine
+    env_file:
+      - ./user_watch_management/.env
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devuser -d devdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  redis:
+    image: redis:7-alpine
+    hostname: redis
+
   web:
     build:
       context: ./user_watch_management
@@ -51,20 +70,9 @@ services:
     env_file:
       - ./user_watch_management/.env
     depends_on:
-      - db_django
+      db_django:
+        condition: service_healthy
 
-  db_django:
-    image: postgres:14-alpine
-    env_file:
-      - ./user_watch_management/.env
-    environment:
-      - POSTGRES_DB=devdb
-      - POSTGRES_USER=devuser
-      - POSTGRES_PASSWORD=changeme
-
-  redis:
-    image: redis:7-alpine
-    hostname: redis
 
   celery_worker:
     build:
