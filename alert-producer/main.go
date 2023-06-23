@@ -12,12 +12,14 @@ import (
 )
 
 func subscribeToVehicle(c *gin.Context) {
-	log.Println("Received a request to /v1/subscribe-vehicle") // Add this line
+	log.Println("Received a request to /v1/subscribe-vehicle")
 	var newVehicle app.VehicleSubscription
 	if err := c.BindJSON(&newVehicle); err != nil {
-		log.Println("Error binding JSON:", err) // And this line
+		log.Println("Error binding JSON:", err)
 		return
 	}
+
+	log.Println("Subscribing to vehicle: ", newVehicle)
 
 	_, err := app.SubscribeToVehicle(&newVehicle)
 

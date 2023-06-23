@@ -94,6 +94,8 @@ func SendUpdateToASubscriber(latestListing *kennyupull.InventoryListing, subscri
 		return
 	}
 
+	log.Println("Successfully sent alert to subscriber: ", subscriber)
+
 	defer resp.Body.Close()
 }
 
