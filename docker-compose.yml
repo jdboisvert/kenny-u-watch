@@ -1,0 +1,106 @@
+version: '3.9'
+
+services:
+  go:
+    build:
+      context: ./alert-producer
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_HOST=db_go
+      - DB_PORT=3306
+      - MAIN_ALERT_CONSUMER_URL=http://web:8000/listing-consumer/v1/new-listing
+    volumes:
+      - "./alert-producer:/app"
+    depends_on:
+      - db_go
+
+  db_go:
+    image: mysql/mysql-server:5.7
+    ports:
+      - "3305:3305"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=root"
+      - "MYSQL_USER=root"
+      - "MYSQL_PASSWORD=root"
+      - "MYSQL_DATABASE=alertproducer"
+    volumes:
+      - ./alert-producer/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  db_django:
+    image: postgres:14-alpine
+    env_file:
+      - ./user_watch_management/.env
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devuser -d devdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  redis:
+    image: redis:7-alpine
+    hostname: redis
+
+  web:
+    build:
+      context: ./user_watch_management
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./user_watch_management:/app"
+    environment:
+      - SECRET_KEY=devsecretkey
+      - DEBUG=1
+      - DB_HOST=db_django
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
+      - ALLOWED_HOSTS=web,localhost,127.0.0.1
+      - ALERT_PRODUCER_URL=http://go:8080/v1/subscribe-vehicle
+    env_file:
+      - ./user_watch_management/.env
+    depends_on:
+      db_django:
+        condition: service_healthy
+
+
+  celery_worker:
+    build:
+      context: ./user_watch_management
+    image: celery_worker
+    environment:
+      - SECRET_KEY=devsecretkey
+      - DEBUG=1
+      - DB_HOST=db_django
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
+    env_file:
+      - ./user_watch_management/.env
+    command: ["celery", "-A", "user_watch", "worker", "-l", "INFO"]
+    volumes:
+      - "./user_watch_management:/app"
+    depends_on:
+      - redis
+      - db_django
+
+  react:
+    build:
+      context: ./kenny-u-watch-web-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./kenny-u-watch-web-app:/app"
+    depends_on:
+      - go
+      - web

@@ -162,7 +162,7 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 # Alert Producer related settings
-ALERT_PRODUCER_URL = os.environ.get("ALERT_PRODUCER_URL", "http://localhost:8080/v1/subscribe-vehicle")
+ALERT_PRODUCER_URL = os.environ.get("ALERT_PRODUCER_URL", "http://go:8080/v1/subscribe-vehicle")
 
 # Simple JWT related settings
 SIMPLE_JWT = {
