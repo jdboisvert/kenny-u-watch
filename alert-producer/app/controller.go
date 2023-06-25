@@ -28,7 +28,10 @@ func CheckForNewVehiclesPosted(vehicle Vehicle) {
 		Make:  vehicle.Manufacturer,
 		Model: vehicle.Model,
 	}
+	log.Println("Searching for inventory with search: ", inventorySearch)
 	latestListing, err := kennyupull.GetLatestListing(inventorySearch)
+
+	log.Println("Latest listing is: ", latestListing)
 
 	if err != nil {
 		log.Println("Got an error when trying to get inventory listings: ", err)
@@ -43,9 +46,10 @@ func CheckForNewVehiclesPosted(vehicle Vehicle) {
 	currentDate := now.Format("2006-01-02") // Listing date format is YYYY-MM-DD
 
 	hasYetToBeCheck := !vehicle.LastRowID.Valid && !vehicle.Location.Valid
+
 	doesNotMatchRecordInDatabase := hasYetToBeCheck || (vehicle.LastRowID.String != latestListing.RowID || vehicle.Location.String != latestListing.Branch)
 
-	if latestListing.DateListed == currentDate && doesNotMatchRecordInDatabase {
+	if latestListing.DateListed <= currentDate && doesNotMatchRecordInDatabase {
 		// New listing found for today for the vehicle that we haven't seen before so send an alert
 		log.Println("New listing found for vehicle: ", vehicle, " and the listing is: ", latestListing)
 		go SendUpdateToSubscribers(latestListing, &vehicle)
