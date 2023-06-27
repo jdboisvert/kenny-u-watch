@@ -10,7 +10,13 @@ If you want to run it locally a quick and easy way is to use Postman. You can im
 
 Or better yet follow the [Quick Start](https://github.com/jdboisvert/kenny-u-watch/tree/main/docs/quick_start.en.md) tutorial to get everything up and running on your machine!
 
-## About this repository
+## Main Features
+- Create, and delete alerts for vehicles you want to watch on Kenny U-Pull's inventory page.
+- Get an email whenever a vehicle you are watching is posted to the inventory page.
+- Admin portal to view all the alerts created by all users.
+- Fully bilingual (English and French) support.
+
+# About this repository
 This repository contains the code for the Kenny U-Watch application and is formatted to be a monorepo however each application is independent in their own sub directories. Everything can be found here to run the full application.
 
 ### User Watch Management (user_watch_management)
