@@ -1,9 +1,14 @@
 # Kenny U-Watch
-An application to make it possible to watch Kenny U-Pull's [vehicle inventory](https://kennyupull.com/auto-parts/our-inventory/) easily via alerts you can create, update, and delete at anytime.
+An application to make it possible to watch Kenny U-Pull's [vehicle inventory](https://kennyupull.com/auto-parts/our-inventory/) easily via alerts you can create, and delete at anytime.
 
 Get an email whenever a car you are watching is posted to the inventory page. This is an re-imagining of Kenny U-Pull's "[Alert me](https://kennyupull.com/alert-me/)" product.
 
 Note this is an unofficial product and is not affiliated with Kenny U-Pull.
+
+# Want to try it out?
+If you want to run it locally a quick and easy way is to use Postman. You can import the collection from the root of this project and use it to test the application.
+
+Or better yet follow the [Quick Start](https://github.com/jdboisvert/kenny-u-watch/tree/main/docs/quick_start.en.md) tutorial to get everything up and running on your machine!
 
 ## About this repository
 This repository contains the code for the Kenny U-Watch application and is formatted to be a monorepo however each application is independent in their own sub directories. Everything can be found here to run the full application.
@@ -18,8 +23,3 @@ This application is responsible for producing alerts to the user. It is meant to
 
 ### Kenny U-Watch Web App (kenny-u-watch-web-app)
 This application is responsible for handling the UI to interact with the alerts and authentication with the API servers. This can be accessed in your browser.
-
-# Want to try it out?
-If you want to run it locally a quick and easy way is to use Postman. You can import the collection from the root of this project and use it to test the application.
-
-Or better yet follow the [Quick Start](https://github.com/jdboisvert/kenny-u-watch/tree/main/docs/quick_start.en.md) tutorial to get everything up and running on your machine!
