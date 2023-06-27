@@ -12,11 +12,15 @@ Note this is an unofficial product and is not affiliated with Kenny U-Pull.
 - Create, and delete alerts for vehicles you want to watch on Kenny U-Pull's inventory page.
 - Get an email whenever a vehicle you are watching is posted to the inventory page.
 - Admin portal to view all the alerts created by all users.
+- Handle multiple users with their own username and password.
 - Fully bilingual (English and French) support.
 
 # Want to try it out?
 
 Follow the [Quick Start](https://github.com/jdboisvert/kenny-u-watch/tree/main/docs/quick_start.en.md) tutorial to get everything up and running on your machine!
+
+## Sneak peek
+![Demo of app](./docs/videos/dashboard_demo.gif)
 
 ## How to use the APIs
 You can import the Postman collection from the root of this project and use it to test the application.
