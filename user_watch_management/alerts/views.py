@@ -73,7 +73,7 @@ def create_alert(request):
 
         return JsonResponse(alert_serializer.data, status=status.HTTP_201_CREATED)
 
-    except Exception as e:
+    except SubscriptionFailureException as e:
         return JsonResponse({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
