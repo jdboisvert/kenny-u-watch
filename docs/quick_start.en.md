@@ -36,13 +36,20 @@ setx EMAIL_PORT 587
 
 # How to run
 
-1. Run the command `docker compose build` and wait for the command to complete with no errors (Note this may take a while the first time you run it as it needs to download all the dependencies and build the images).
+1. Ensure to set up .env files by running the following commands
+```shell
+cp ./user_watch_management/.env.example ./user_watch_management/.env
+cp ./alert-producer/.env.example ./alert-producer/.env
+```
+Modify these files as needed.
 
-2. Run `docker compose up`. This will start all the services and you should see the following in your Docker Desktop application:
+2. Run the command `docker compose build` and wait for the command to complete with no errors (Note this may take a while the first time you run it as it needs to download all the dependencies and build the images).
+
+3. Run `docker compose up`. This will start all the services and you should see the following in your Docker Desktop application:
 
 ![Docker Desktop](./images/docker_running.png)
 
-3. Open your web browser and navigate to `http://localhost:3000/signup`. This is where the web app is hosted. Note it is possible the app is not loaded yet and is still starting up. If you do not see any page yet just wait a bit and try again.
+4. Open your web browser and navigate to `http://localhost:3000/signup`. This is where the web app is hosted. Note it is possible the app is not loaded yet and is still starting up. If you do not see any page yet just wait a bit and try again.
 
 4. You should now see the following screen and be ready to start creating alerts!
 
@@ -50,7 +57,7 @@ setx EMAIL_PORT 587
 
 # Creating your first alert
 
-1. First make your account by providing an email you wish to get alerts on and a password that only you will know.
+1. First make your account by navigating to `http://localhost:3000/signup` and providing an email you wish to get alerts on and a password that only you will know. This is important for you to be able to log in and view and manage your alerts in the future.
 
 2. Now navigate to `http://localhost:3000/login` and login with the same email and password provided above. You should be brought to the main dashboard.
 
