@@ -42,11 +42,23 @@ jobs:
         pip install -r requirements_dev.txt
 
     - name: Set up Database
+      env: # Defining environment variables for the action
+        DB_HOST: localhost
+        DB_NAME: test_db
+        DB_USER: user
+        DB_PASS: password
       run: |
         cd user_watch_management
         python manage.py migrate
 
     - name: Run Django tests
+      env:
+        DB_HOST: localhost
+        DB_NAME: test_db
+        DB_USER: user
+        DB_PASS: password
+        SECRET_KEY: your-secret-key-here
+        DEBUG: '0'
       run: |
         cd user_watch_management
         python manage.py test
