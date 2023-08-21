@@ -1,0 +1,36 @@
+name: Go Test in alert-producer
+
+on:
+  push:
+    paths:
+      - 'alert-producer/**' # This ensures the action only runs when there are changes in the alert-producer directory
+  pull_request:
+    paths:
+      - 'alert-producer/**'
+
+jobs:
+  test:
+    name: Run Go tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17 # Specify the Go version. Adjust accordingly.
+
+    - name: Cache Go modules
+      uses: actions/cache@v2
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Run tests in alert-producer
+      run: |
+        cd alert-producer
+        go test ./...
