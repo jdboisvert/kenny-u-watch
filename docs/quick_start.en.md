@@ -37,7 +37,7 @@ setx EMAIL_PORT 587
 # How to run
 
 1. Ensure to set up .env files by running the following commands
-```bash
+```shell
 cp ./user_watch_management/.env.example ./user_watch_management/.env
 cp ./alert-producer/.env.example ./alert-producer/.env
 ```
