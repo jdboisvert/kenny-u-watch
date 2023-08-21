@@ -2,9 +2,13 @@ name: Go Test in alert-producer
 
 on:
   push:
-    paths:
-      - 'alert-producer/**' # This ensures the action only runs when there are changes in the alert-producer directory
+    branches:
+      - 'main'
+  workflow_dispatch:
   pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - "*"
     paths:
       - 'alert-producer/**'
 
