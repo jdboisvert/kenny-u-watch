@@ -8,7 +8,7 @@ require github.com/go-sql-driver/mysql v1.7.0
 
 require (
 	github.com/go-co-op/gocron v1.18.0
-	github.com/jdboisvert/kenny-u-pull-go-sdk v0.2.0
+	github.com/jdboisvert/kenny-u-pull-go-sdk v1.0.0
 )
 
 require github.com/h2non/parth v0.0.0-20190131123155-b4df798d6542 // indirect
