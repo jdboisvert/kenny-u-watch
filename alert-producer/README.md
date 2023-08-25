@@ -1,4 +1,4 @@
-# Alert Producer v0.1.0
+# Alert Producer v0.1.1
 
 An application used to analyze new postings on the Kenny U-Pull website which will then notify all subscribers.
 
