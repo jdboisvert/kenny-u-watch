@@ -55,5 +55,14 @@
     },
     "logout": {
       "title": "Logout"
+    },
+    "requiredField": {
+      "title": "This field is required"
+    },
+    "genericError": {
+      "title": "Something went wrong"
+    },
+    "validation": {
+      "validYear": "Year must be after 1900"
     }
 }

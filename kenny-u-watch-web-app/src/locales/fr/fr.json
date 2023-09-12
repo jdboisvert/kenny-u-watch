@@ -55,5 +55,14 @@
   },
    "logout":{
        "title":"Se déconnecter"
-   }
+   },
+   "requiredField": {
+      "title": "Ce champ est requis"
+   },
+   "genericError": {
+      "title": "Une erreur est survenue"
+   },
+   "validation": {
+      "validYear": "L'année doit être entre apres 1900"
+    }
 }

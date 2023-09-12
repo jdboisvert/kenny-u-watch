@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import './Header.css';
 
@@ -11,6 +12,7 @@ const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(!!accessToken);
     const { t, i18n } = useTranslation();
     const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+    const navigate = useNavigate();
 
     const loginHref = '/login';
 
@@ -30,7 +32,7 @@ const Header = () => {
         setIsLoggedIn(false);
 
         // Redirect to the login page.
-        window.location.href = loginHref;
+        navigate(loginHref);
     };
 
     return (
@@ -53,10 +55,10 @@ const Header = () => {
             ) : (
               <>
                 <li className={`header-menu-item ${location.pathname === '/login' ? 'active' : ''}`}>
-                  <Link to="/login">Login</Link>
+                  <Link to="/login">{t("login.title")}</Link>
                 </li>
                 <li className={`header-menu-item ${location.pathname === '/signup' ? 'active' : ''}`}>
-                  <Link to="/signup">Signup</Link>
+                  <Link to="/signup">{t("signUp.title")}</Link>
                 </li>
               </>
             )}
