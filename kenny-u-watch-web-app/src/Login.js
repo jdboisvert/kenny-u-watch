@@ -9,8 +9,8 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const { register, handleSubmit, formState: { errors }, setError } = useForm();
 
-  const [setAccess] = useSessionStorage('access', '');
-  const [setRefresh] = useSessionStorage('refresh', '');
+  const [access, setAccess] = useSessionStorage('access', '');
+  const [refresh, setRefresh] = useSessionStorage('refresh', '');
 
   const { t } = useTranslation();
 
@@ -39,7 +39,7 @@ const Login = () => {
   return (
     <form className="Login" onSubmit={handleSubmit(onSubmit)}>
       <h2>
-        {t('header.title')}
+        {t("login.title")}
       </h2>
       <div>
         <label htmlFor="email">{t('email.title')}:</label>

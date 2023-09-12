@@ -1,55 +1,60 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import './Signup.css';
-import {useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = (props) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit, formState: { errors }, setError } = useForm();
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  const {t} = useTranslation();
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const onSubmit = async (data) => {
     try {
       await axios.post('http://127.0.0.1:8000/signup/v1/new', {
-        email,
-        username: email,
-        password,
+        email: data.email,
+        username: data.email,
+        password: data.password,
       });
 
       navigate('/login');
     } catch (error) {
       console.error(error);
-
-      // TODO display error message to user
+      setError("apiError", {
+        type: "manual",
+        message: "Something went wrong with the API request.",
+      });
     }
   };
 
   return (
-    <form className="Signup" onSubmit={handleSubmit}>
-      <h2>Sign Up</h2>
+    <form className="Signup" onSubmit={handleSubmit(onSubmit)}>
+      <h2>{t("signUp.title")}</h2>
+
       <div>
         <label htmlFor="email">{t('email.title')}:</label>
         <input
           type="email"
           id="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          {...register("email", { required: true })}
         />
+        {errors.email && <span>{t('requiredField.title')}</span>}
       </div>
+
       <div>
         <label htmlFor="password">{t('password.title')}:</label>
         <input
           type="password"
           id="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          {...register("password", { required: true })}
         />
+        {errors.password && <span>{t('requiredField.title')}</span>}
       </div>
+
+      {errors.apiError && <p className="error-message">{t('genericError.title')}</p>}
+
       <button type="submit">{t('signUp.title')}</button>
     </form>
   );

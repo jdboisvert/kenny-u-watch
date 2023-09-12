@@ -55,10 +55,10 @@ const Header = () => {
             ) : (
               <>
                 <li className={`header-menu-item ${location.pathname === '/login' ? 'active' : ''}`}>
-                  <Link to="/login">Login</Link>
+                  <Link to="/login">{t("login.title")}</Link>
                 </li>
                 <li className={`header-menu-item ${location.pathname === '/signup' ? 'active' : ''}`}>
-                  <Link to="/signup">Signup</Link>
+                  <Link to="/signup">{t("signUp.title")}</Link>
                 </li>
               </>
             )}
