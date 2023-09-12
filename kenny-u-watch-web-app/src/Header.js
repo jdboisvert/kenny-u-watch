@@ -11,6 +11,7 @@ const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(!!accessToken);
     const { t, i18n } = useTranslation();
     const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+    const navigate = useNavigate();
 
     const loginHref = '/login';
 
@@ -30,7 +31,7 @@ const Header = () => {
         setIsLoggedIn(false);
 
         // Redirect to the login page.
-        window.location.href = loginHref;
+        navigate(loginHref);
     };
 
     return (
