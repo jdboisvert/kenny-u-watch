@@ -1,5 +1,5 @@
 import React from 'react';
-import './Signup.css';
+import './authStyles.css';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';

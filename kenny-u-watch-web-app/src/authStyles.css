@@ -1,33 +1,33 @@
-.Login {
+.Login, .Signup {
     background-color: #f3f3f3;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px #ccc;
     max-width: 35%;
     margin: 10px auto;
-  }
+}
 
-  .Login h2 {
+.Login h2, .Signup h2 {
     text-align: center;
     margin-bottom: 30px;
-  }
+}
 
-  .Login label {
+.Login label, .Signup label {
     display: block;
     margin-bottom: 10px;
-  }
+}
 
-  .Login input[type="email"],
-  .Login input[type="password"] {
+.Login input[type="email"], .Signup input[type="email"],
+.Login input[type="password"], .Signup input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;
-  }
+}
 
-  .Login button[type="submit"] {
+.Login button[type="submit"], .Signup button[type="submit"] {
     width: 50%;
     padding: 10px;
     font-size: 16px;
@@ -36,9 +36,9 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
+}
 
-  .Login .error-message {
+.Login .error-message, .Signup .error-message {
     color: #d32f2f;
     background-color: #fbe9e9;
     padding: 10px;
