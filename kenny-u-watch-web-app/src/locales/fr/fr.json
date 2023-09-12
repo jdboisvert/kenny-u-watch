@@ -61,5 +61,8 @@
    },
    "genericError": {
       "title": "Une erreur est survenue"
-   }
+   },
+   "validation": {
+      "validYear": "L'année doit être entre apres 1900"
+    }
 }

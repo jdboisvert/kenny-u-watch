@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-
-import useSessionStorage from './useSessionStorage';
-
-import {useNavigate} from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-
-
+import React from 'react';
 import './CreateAlert.css';
+import axios from 'axios';
+import useSessionStorage from './useSessionStorage';
+import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 const CreateAlert = () => {
-  const [manufacturerName, setManufacturerName] = useState('');
-  const [modelName, setModelName] = useState('');
-  const [modelYear, setModelYear] = useState('');
+  const { register, handleSubmit, formState: { errors }, setError } = useForm();
 
   const [access, setAccess] = useSessionStorage('access', '');
   const [refresh, setRefresh] = useSessionStorage('refresh', '');
@@ -21,8 +16,15 @@ const CreateAlert = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const onSubmit = async (data) => {
+    const body = {
+      vehicle: {
+        manufacturer_name: data.manufacturerName,
+        model_name: data.modelName,
+        model_year: data.modelYear,
+      },
+    };
+
     try {
       const options = {
         headers: {
@@ -30,81 +32,78 @@ const CreateAlert = () => {
           'Content-Type': 'application/json',
         },
       };
-      const body = {
-        vehicle: {
-          manufacturer_name: manufacturerName,
-          model_name: modelName,
-          model_year: modelYear,
-        },
-      };
       await axios.post('http://127.0.0.1:8000/alerts/v1/create-alert', body, options);
 
       navigate('/dashboard');
     } catch (error) {
-        if (error.response && error.response.status === 401) {
-            // If the request fails with a 401, refresh the token
-            const refreshResponse = await axios.post('http://127.0.0.1:8000/api/v1/token/refresh/', {
-                "refresh": refresh,
-            });
-            const newAccess = refreshResponse.data.access;
-            const newRefresh = refreshResponse.data.refresh;
-            setAccess(newAccess);
-            setRefresh(newRefresh);
+      if (error.response && error.response.status === 401) {
+        const refreshResponse = await axios.post('http://127.0.0.1:8000/api/v1/token/refresh/', {
+          "refresh": refresh,
+        });
 
-            // Try the request again with the new access token
-            const options = {
-                headers: {
-                  Authorization: `Bearer ${newAccess}`,
-                  'Content-Type': 'application/json',
-                },
-              };
-              const body = {
-                vehicle: {
-                  manufacturer_name: manufacturerName,
-                  model_name: modelName,
-                  model_year: modelYear,
-                },
-              };
-              await axios.post('http://127.0.0.1:8000/alerts/v1/create-alert', body, options);
+        const newAccess = refreshResponse.data.access;
+        const newRefresh = refreshResponse.data.refresh;
+        setAccess(newAccess);
+        setRefresh(newRefresh);
 
-              navigate('/dashboard');
-          } else {
-            console.error(error);
-
-            // TODO show error to the user
-          }
+        const retryOptions = {
+          headers: {
+            Authorization: `Bearer ${newAccess}`,
+            'Content-Type': 'application/json',
+          },
+        };
+        await axios.post('http://127.0.0.1:8000/alerts/v1/create-alert', body, retryOptions);
+        navigate('/dashboard');
+      } else {
+        console.error(error);
+        setError("apiError", {
+          type: "manual",
+          message: t('genericError.title'),
+        });
+      }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="CreateAlert" onSubmit={handleSubmit(onSubmit)}>
       <label>
         {t('manufacturer.title')}:
         <input
           type="text"
-          value={manufacturerName}
-          onChange={(event) => setManufacturerName(event.target.value)}
+          {...register("manufacturerName", { required: true })}
         />
       </label>
+      {errors.manufacturerName && <span>{t('requiredField.title')}</span>}
       <br />
+
       <label>
         {t('model.title')}:
         <input
           type="text"
-          value={modelName}
-          onChange={(event) => setModelName(event.target.value)}
+          {...register("modelName", { required: true })}
         />
       </label>
+      {errors.modelName && <span>{t('requiredField.title')}</span>}
       <br />
+
       <label>
         {t('year.title')}:
         <input
           type="text"
-          value={modelYear}
-          onChange={(event) => setModelYear(event.target.value)}
+          {...register("modelYear", {
+            required: t('requiredField.title'),
+            pattern: {
+              value: /^(19[0-9]{2}|20[0-9]{2}|2100)$/,
+              message: t('validation.validYear')
+            }
+          })}
         />
       </label>
+      {errors.modelYear && <span>{errors.modelYear.message}</span>}
       <br />
+
+      {errors.apiError && <p className="error-message">{errors.apiError.message}</p>}
+
       <button type="submit">{t('createAlert.title')}</button>
     </form>
   );
