@@ -1,5 +1,5 @@
 import React from 'react';
-import './Login.css';
+import './authStyles.css';
 import axios from 'axios';
 import useSessionStorage from './useSessionStorage';
 import { useTranslation } from 'react-i18next';
