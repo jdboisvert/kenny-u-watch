@@ -55,5 +55,11 @@
   },
    "logout":{
        "title":"Se déconnecter"
+   },
+   "requiredField": {
+      "title": "Ce champ est requis"
+   },
+   "genericError": {
+      "title": "Une erreur est survenue"
    }
 }
