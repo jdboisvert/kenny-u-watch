@@ -12,6 +12,8 @@ const Header = () => {
     const { t, i18n } = useTranslation();
     const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
 
+    const loginHref = '/login';
+
     useEffect(() => {
         // Check if ever the access token is set whenever the location of the app changes.
         accessToken = sessionStorage.getItem("access");
@@ -21,6 +23,14 @@ const Header = () => {
     const changeLanguage = (language) => {
         i18n.changeLanguage(language);
         setCurrentLanguage(language);
+    };
+
+    const logout = () => {
+        sessionStorage.removeItem("access");
+        setIsLoggedIn(false);
+
+        // Redirect to the login page.
+        window.location.href = loginHref;
     };
 
     return (
@@ -35,6 +45,9 @@ const Header = () => {
                 </li>
                 <li className={`header-menu-item ${location.pathname === '/create-alert' ? 'active' : ''}`}>
                   <Link to="/create-alert">{t('createAlert.title')}</Link>
+                </li>
+                <li className={`header-menu-item`}>
+                  <button className="header-menu-item-button" onClick={() => logout()}>{t('logout.title')}</button>
                 </li>
               </>
             ) : (

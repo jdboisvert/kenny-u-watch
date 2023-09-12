@@ -52,5 +52,8 @@
   },
   "signUp":{
      "title":"S'inscrire"
-  }
+  },
+   "logout":{
+       "title":"Se déconnecter"
+   }
 }
